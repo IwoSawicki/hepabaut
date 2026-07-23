@@ -1,202 +1,126 @@
-# Umbau hepabaut.de: Webflow → Astro (SEO-first)
+# Projektplan: hepabaut.de — Webflow → Astro (1:1, dann SEO)
 
-> Ziel: Die bestehende Webflow-Seite (~400 Unterseiten, programmatisch aus 3 Leistungen ×
-> Orts-Liste erzeugt) 1:1 in Astro nachbauen, ohne Rankings zu verlieren, danach hart SEO-
-> optimieren und mehrere neue Landingpages für Google Ads aufsetzen (Ads-Start in ~1–2 Wochen).
+> Ziel: Bestehende Webflow-Seite **1:1** nach **Astro + Tailwind** übernehmen (Fonts, Farben,
+> Layout, Texte identisch), Rankings erhalten, danach hart SEO-optimieren und neue
+> Landingpages für Google Ads bauen (Ads-Start in ~1–2 Wochen).
 
----
-
-## 0. Kurzfassung / Empfehlung
-
-Dein Aufbau ist **Programmatic SEO (pSEO)**: 3 Leistungs-Templates + eine Orts-Liste, das
-Platzhalter-`[ORT]` wird überall im Text ersetzt. Das ist mit Astro **deutlich sauberer, schneller
-und billiger** umsetzbar als in Webflow – und Astro liefert von Haus aus statisches HTML
-(Top Core Web Vitals = Ranking-Vorteil + günstigerer Google-Ads-Quality-Score).
-
-Vorgehen in 5 Phasen:
-
-1. **Setup & Datenmodell** (Astro-Projekt, Orts-Liste + Leistungs-Templates als Daten)
-2. **1:1-Nachbau** (identische URLs, identische Inhalte, identisches Layout)
-3. **SEO-Härtung** (Structured Data, Meta-Templates, interne Verlinkung, Core Web Vitals)
-4. **Launch & Migration** (URL-Mapping, 301-Redirects, Search Console, Sitemap einreichen)
-5. **Ads-Landingpages + Conversion-Tracking** (DSGVO-konform, für Google Ads optimiert)
-
-**Wichtigster Grundsatz für den 1:1-Nachbau:** URLs, Title-Tags und Meta-Descriptions **exakt**
-übernehmen. Rankings hängen an der URL – ändert sie sich unkontrolliert, verlierst du Sichtbarkeit.
+Ergänzend: `CLAUDE.md` (Arbeitsregeln), `reference/orte.txt` (117 Ort-Slugs),
+`reference/sitemap-urls.txt` (alle 356 Original-URLs).
 
 ---
 
-## 1. Was ich von dir brauche (Inputs)
+## 1. Bestandsaufnahme (aus der Sitemap gesichert)
 
-Ich konnte die Live-Seite aus dieser Umgebung nicht crawlen (Netzwerk-Policy + Webflow-Bot-Schutz
-blockieren `www.hepabaut.de`). Damit der Nachbau wirklich 1:1 wird, brauche ich von dir:
-
-- [ ] **Webflow CMS-Export als CSV** – je Collection (Orte + ggf. Leistungen). Das ist deine
-      „Wahrheit" für die ~400 Seiten. In Webflow: *CMS → Collection → Export*.
-- [ ] **Webflow Code-Export (HTML/CSS)** oder Zugriff, damit ich Layout, Texte und die exakten
-      URL-Slugs 1:1 übernehmen kann. Alternativ: die `sitemap.xml` als Datei hochladen.
-- [ ] **Das Platzhalter-Textmuster** je Leistung: der komplette Fließtext mit `[ORT]` an den
-      Stellen, wo ersetzt wird (Hero, Intro, Leistungsbeschreibung, FAQ, CTA …).
-- [ ] **Marken-Assets**: Logo, Farben, Schriftarten, Bilder.
-- [ ] **Kontaktdaten & Rechtstexte**: Firmenname, Adresse, Telefon, E-Mail, Impressum,
-      Datenschutzerklärung.
-- [ ] **Empfänger für Formulare** (an welche E-Mail sollen Anfragen gehen?).
-- [ ] **Google-Zugänge** (später): Search Console, Google Analytics 4, Google Ads – oder ich
-      erkläre dir das Einrichten.
-
-> Sobald die CSV + das Textmuster da sind, kann ich die 400 Seiten **automatisch** generieren.
+- **Programmatic SEO:** 3 Leistungen × 117 Orte, `{ort}`-Platzhalter im Text.
+- **3 Leistungen:** `sanierung`, `renovierung`, `wasserschaden`.
+- **117 Orte** (Raum Heidelberg / Mannheim / Bergstraße / Odenwald / Vorderpfalz).
+- **356 Seiten gesamt:** 351 Ortsseiten + Start + `/renovierung` + `/kontakt` + `/impressum`
+  + `/datenschutz`.
+- **URL-Muster (unverändert übernehmen):** `/<leistung>/<ort>`, Slug `wasserschaden` singular
+  ohne Umlaut, Ort-Slugs ASCII-gefaltet.
+- **Offen (am `mirror/` zu klären):** Gibt es Übersichtsseiten für `sanierung` und
+  `wasserschaden`? In der Sitemap steht nur `/renovierung`.
 
 ---
 
-## 2. Warum Astro (und wie pSEO darin funktioniert)
+## 2. Offener Punkt: `mirror/` fehlt im Repo ⚠️
 
-- **Statisches HTML zur Build-Zeit** → schnellste Ladezeit, beste Core Web Vitals, perfekt
-  crawlbar. Kein Client-JS nötig für Inhaltsseiten.
-- **`getStaticPaths()`** erzeugt aus einer Datenliste beliebig viele Seiten – genau dein
-  „3 Leistungen × Orte"-Muster, nur code-getrieben statt manuell im CMS gepflegt.
-- **Content Collections / Datendateien** als „CMS": Orte und Leistungstexte liegen als
-  CSV/JSON/TS im Repo, versioniert und leicht massenhaft editierbar.
-- **`@astrojs/sitemap`, `astro:assets`** (Bildoptimierung WebP/AVIF), Head-Management,
-  Structured Data – alles nativ.
-- **Kostenlos hostbar** (Cloudflare Pages / Netlify / Vercel), Deploy per Git-Push.
+Der Branch `claude/hepabaut-webflow-astro-kfvssu` enthält aktuell **nur** die Planungsdateien —
+**kein `mirror/`-Ordner**. Für den 1:1-Nachbau (Farben, Fonts, exakte Texte, Meta-Tags) ist der
+Mirror die verbindliche Vorlage.
 
-### Das Datenmodell (Kern des Ganzen)
+**Bitte prüfen:**
+- Wurde der Ordner auf **genau diesen Branch** gepusht? (`git branch` → sollte
+  `claude/hepabaut-webflow-astro-kfvssu` sein.)
+- Beim GitHub-Web-Upload: Ordner samt Inhalt hochgeladen und **committet**?
+- Wurden große Dateien (>100 MB) von GitHub abgelehnt? Dann Medien vorher aussortieren
+  (`--reject "*.mp4,*.mov,*.zip"`) oder als ZIP hochladen — ich entpacke es hier.
+
+Sobald `mirror/` da ist, starte ich Phase 0/1.
+
+---
+
+## 3. Architektur (Astro + Tailwind)
+
+Datengetrieben statt 400× Handarbeit — dein `{ort}`-Prinzip als Code:
 
 ```
 src/
   data/
-    leistungen.ts        # 3 Leistungen: slug, name, meta-templates, textbausteine mit {ort}
-    orte.ts / orte.csv   # Orts-Liste: name, slug, plz, bundesland, nachbarorte…
+    orte.ts          # [{ slug, name }]  (name = Anzeigename mit Umlaut, aus mirror)
+    leistungen.ts    # 3 Leistungen: slug, name, title/meta-Template, Textbausteine mit {ort}
+  layouts/BaseLayout.astro      # <head>, Meta, Canonical, JSON-LD, Header/Footer
+  components/                    # Hero, LeistungBlock, FAQ, CTA, Header, Footer …
   pages/
-    [leistung]/[ort].astro   # erzeugt via getStaticPaths ~400 Seiten
-    index.astro              # Startseite
-    impressum.astro, datenschutz.astro, kontakt.astro
-  components/
-    Hero.astro, LeistungBlock.astro, FAQ.astro, CTA.astro, Header.astro, Footer.astro
-  layouts/
-    BaseLayout.astro     # <head>, Meta, Schema, Header/Footer
+    index.astro
+    renovierung/index.astro      # (+ ggf. sanierung/, wasserschaden/ – je nach mirror)
+    kontakt.astro, impressum.astro, datenschutz.astro
+    [leistung]/[ort].astro       # getStaticPaths(): Leistung × Ort = 351 Seiten
+  styles/global.css              # Tailwind + self-hosted Fonts + Farb-Tokens aus mirror
+public/                          # Bilder, Fonts, robots.txt
 ```
 
-Die Route `[leistung]/[ort].astro` bildet das kartesische Produkt (Leistung × Ort) und ersetzt
-`{ort}` in allen Textbausteinen – exakt dein `[ORT]`-Prinzip, nur zentral gepflegt.
+`[leistung]/[ort].astro` erzeugt via `getStaticPaths()` das kartesische Produkt und ersetzt
+`{ort}` in allen Bausteinen — exakt dein Webflow-CMS-Prinzip, nur zentral und versioniert.
 
-> **URL-Struktur:** Wir übernehmen 1:1 die bestehenden Slugs aus deiner Sitemap
-> (z. B. `/sanierung/berlin` **oder** `/sanierung-berlin` – je nachdem, was heute live ist).
-> Das ist nicht verhandelbar für den Ranking-Erhalt und wird beim ersten Schritt festgelegt.
-
----
-
-## 3. SEO-Härtung („Hardcore") – Checkliste
-
-**On-Page / technisch**
-- [ ] Genau **ein `<h1>`** pro Seite, saubere Heading-Hierarchie (h2/h3).
-- [ ] **Title & Meta-Description als Template** je Seite, mit Ort/Leistung befüllt und unter
-      Längenlimit (Title ~60 Zeichen, Description ~155). Jede der 400 Seiten einzigartig.
-- [ ] **Canonical-Tag** auf jeder Seite (self-referencing).
-- [ ] **XML-Sitemap** automatisch (`@astrojs/sitemap`) + **robots.txt**.
-- [ ] **Open Graph / Twitter Cards** für Social-Vorschauen.
-- [ ] `lang="de"`, sprechende, konsistente Slugs.
-
-**Structured Data (Schema.org, JSON-LD)** – großer Hebel für lokale Suche:
-- [ ] `LocalBusiness` (NAP: Name, Adresse, Telefon) global.
-- [ ] `Service` + `areaServed` (der jeweilige Ort) je Unterseite.
-- [ ] `BreadcrumbList` für die Navigationspfade.
-- [ ] `FAQPage` wo FAQ-Blöcke existieren (kann Rich Snippets bringen).
-
-**Core Web Vitals / Performance**
-- [ ] Bilder via `astro:assets` → WebP/AVIF, `width`/`height` gesetzt, `loading="lazy"`,
-      Hero-Bild `fetchpriority="high"`.
-- [ ] Kritisches CSS inline, Fonts self-hosted + `font-display: swap` (keine Google-Fonts-
-      Requests → auch DSGVO-sicherer).
-- [ ] Möglichst **null Client-JS** auf Inhaltsseiten.
-
-**Der pSEO-Killer: Thin/Duplicate Content** ⚠️
-400 fast identische Seiten sind das Hauptrisiko, dass Google sie als „doorway pages" abwertet.
-Gegenmaßnahmen (in der Optimierungsphase):
-- [ ] Pro Ort **echte lokale Signale** einbauen: Stadtteile/PLZ, Nachbarorte, ggf.
-      Referenzen/Projekte, lokale Besonderheiten – nicht nur Name austauschen.
-- [ ] Textvarianten/Bausteine rotieren, damit nicht 400× derselbe Absatz steht.
-- [ ] **Interne Verlinkung**: jede Ortsseite verlinkt auf Nachbarorte + die anderen 2 Leistungen
-      am selben Ort. Das verteilt Link-Equity und hilft der Indexierung massiv.
-- [ ] Ehrlich priorisieren: lieber die wichtigsten Orte stark machen als 400 dünne Seiten.
+**Farben & Fonts:** werden aus dem `mirror/`-CSS ausgelesen und als Tailwind-Theme-Tokens
+hinterlegt (keine „ungefähren" Werte). Fonts self-hosted.
 
 ---
 
-## 4. Migration ohne Ranking-Verlust (kritischste Phase)
+## 4. Phasenplan
 
-- [ ] **Vollständiges URL-Mapping** alt → neu aus der Sitemap erstellen. Ziel: **1:1 identisch**.
-- [ ] Für jede – falls überhaupt nötige – URL-Änderung ein **301-Redirect** (kein 302).
-- [ ] Title/Description/H1 pro URL gegen die alte Seite abgleichen.
-- [ ] **Staging-Deploy** (Preview-URL) → Seiten stichprobenartig gegen Live prüfen.
-- [ ] Domain umziehen (DNS auf neuen Host), SSL sicherstellen.
-- [ ] **Google Search Console**: neue Sitemap einreichen, Abdeckung/Fehler die ersten Wochen
-      täglich beobachten, Rankings monitoren.
-- [ ] Alte Webflow-Seite erst nach bestätigter Indexierung abschalten.
+### Phase 0 — Setup (nach `mirror/`)
+- [ ] Astro + Tailwind initialisieren, `@astrojs/sitemap`, Sharp.
+- [ ] Farb-/Font-Tokens + globale Styles aus `mirror/`-CSS ableiten.
+- [ ] Header/Footer als Komponenten (aus mirror).
 
----
+### Phase 1 — 1:1-Nachbau
+- [ ] `orte.ts` mit Slug + **Anzeigename** (Anzeigenamen aus mirror-H1s ziehen).
+- [ ] `leistungen.ts`: Textbausteine je Leistung mit `{ort}` (Texte 1:1 aus mirror).
+- [ ] `[leistung]/[ort].astro` → 351 Seiten generieren.
+- [ ] Statische Seiten: Start, `/renovierung`(+ggf. weitere Übersichten), Kontakt,
+      Impressum, Datenschutz — Inhalt 1:1.
+- [ ] Title/Meta/Canonical je Seite exakt wie Original.
+- [ ] Visueller Abgleich Original vs. Nachbau (Stichproben je Leistung + mehrere Orte).
 
-## 5. Neue Landingpages + Google Ads (Ziel: Anfragen)
+### Phase 2 — SEO-Härtung
+- [ ] JSON-LD: LocalBusiness, Service + `areaServed`, BreadcrumbList, FAQPage.
+- [ ] `@astrojs/sitemap` + `robots.txt`, OG/Twitter-Cards.
+- [ ] Core Web Vitals: `astro:assets` (WebP/AVIF, width/height, lazy), kritisches CSS inline,
+      Fonts `font-display:swap`, null Client-JS auf Inhaltsseiten.
+- [ ] Interne Verlinkung: jede Ortsseite → Nachbarorte + andere 2 Leistungen am selben Ort.
+- [ ] Thin-Content entschärfen: pro Ort echte lokale Signale/Textvarianten (nicht nur Name tauschen).
 
-**Landingpages** (getrennt von den SEO-Ortsseiten, conversion-optimiert):
-- [ ] Klare, einzelne Conversion (Formular + Klick-to-Call), „above the fold" ein CTA.
-- [ ] Trust-Signale: Bewertungen, Zertifikate, Referenzen, Reaktionszeit, Garantie.
-- [ ] Sehr schnelle Ladezeit → **besserer Quality Score → günstigere Klickpreise**.
-- [ ] Message-Match: LP-Headline = Anzeigentext = Keyword der Kampagne.
-- [ ] Pro Kampagne/Anzeigengruppe eine eigene LP (z. B. je Leistung + Region).
+### Phase 3 — Launch / Migration (Ranking-Erhalt)
+- [ ] URL-Mapping alt→neu = 1:1 (Abgleich gegen `reference/sitemap-urls.txt`).
+- [ ] 301-Redirects nur falls unvermeidbar; Staging-Preview prüfen.
+- [ ] Hosting (Cloudflare Pages / Netlify / Vercel), Domain/DNS, SSL.
+- [ ] Search Console: neue Sitemap einreichen, Abdeckung/Rankings beobachten; alte Seite erst
+      nach bestätigter Indexierung abschalten.
 
-**Formular / Lead-Handling**
-- [ ] Formular-Endpoint: Serverless-Function (Cloudflare/Netlify/Vercel) oder Dienst
-      (Formspree/Netlify Forms) → Anfrage per E-Mail an dich + optional CRM.
-- [ ] Spam-Schutz (Honeypot / hCaptcha/Turnstile – DSGVO-konform wählbar).
-
-**Tracking & DSGVO (Pflicht in DE, sonst kein sauberes Ads-Tracking)**
-- [ ] **Google Consent Mode v2** + Cookie-Banner (Opt-in), z. B. Klaro/Cookiebot/usercentrics.
-- [ ] GA4 + **Google-Ads-Conversion-Tag** (Formular-Absenden & Anruf als Conversion).
-- [ ] Impressum & Datenschutzerklärung aktuell (Formular, Tracking, Hosting nennen).
-
-**Ads-Setup (parallel, kein Website-Blocker)**
-- [ ] Konto/Conversions einrichten, Keyword- & Anzeigenstruktur, Budget/Gebote.
-- [ ] Start, sobald ≥1 Landingpage live + Tracking verifiziert ist.
-
----
-
-## 6. Empfohlener Tech-Stack
-
-| Bereich | Wahl | Warum |
-|---|---|---|
-| Framework | **Astro (v5)** | statisches HTML, pSEO via `getStaticPaths`, top CWV |
-| Styling | **Tailwind CSS** | schneller 1:1-Nachbau, konsistent, kleines CSS |
-| Inhalte | TS/JSON/CSV-Datendateien (Content Collections) | 400 Seiten massenhaft + versioniert pflegbar |
-| Bilder | `astro:assets` (Sharp) | WebP/AVIF, auto-Optimierung |
-| Sitemap/SEO | `@astrojs/sitemap` + JSON-LD | Standard, wartungsarm |
-| Hosting | **Cloudflare Pages** (o. Netlify/Vercel) | kostenlos, schnell, Deploy per Git-Push |
-| Formular | Serverless Function / Formspree | Leads per Mail, DSGVO-steuerbar |
-| Consent | Consent Mode v2 + Banner | Ads/Analytics rechtssicher |
+### Phase 4 — Ads-Landingpages (parallel möglich, damit Ads pünktlich starten)
+- [ ] Conversion-fokussierte LPs (Formular + Klick-to-Call, Trust-Signale, Message-Match).
+- [ ] Formular-Endpoint (Serverless/Formspree) → Anfrage per E-Mail + Spam-Schutz.
+- [ ] DSGVO: Consent Mode v2 + Cookie-Banner, GA4 + Google-Ads-Conversion-Tag.
 
 ---
 
-## 7. Zeitplan (Richtwert, passend zum Ads-Start in 1–2 Wochen)
+## 5. Zeitplan (Richtwert)
 
 | Phase | Inhalt | Dauer |
 |---|---|---|
-| **0** | Setup: Astro-Projekt, Tailwind, Datenmodell, ein Muster-Template live | 1 Tag |
-| **1** | 1:1-Nachbau: Layout + Templates + 400 Seiten generieren (nach CSV-Export) | 2–3 Tage |
-| **2** | SEO-Härtung: Meta, Schema, Sitemap, interne Verlinkung, CWV | 2 Tage |
-| **3** | Launch/Migration: URL-Mapping, 301, Staging-Check, Domain, Search Console | 1–2 Tage |
-| **4** | Ads-Landingpages + Consent/Tracking (parallel zu 2/3 startbar) | 2–3 Tage |
-
-> Landingpages + Tracking (Phase 4) können **parallel** laufen, damit Ads pünktlich starten,
-> auch wenn die volle SEO-Optimierung (Phase 2) noch nachzieht.
+| 0 | Setup, Farben/Fonts, Header/Footer | 1 Tag |
+| 1 | 1:1-Nachbau + 356 Seiten | 2–3 Tage |
+| 2 | SEO-Härtung | 2 Tage |
+| 3 | Launch/Migration | 1–2 Tage |
+| 4 | Ads-Landingpages + Tracking (parallel zu 2/3) | 2–3 Tage |
 
 ---
 
-## 8. Nächster konkreter Schritt
+## 6. Nächster Schritt
 
-1. Du lädst mir **(a) den Webflow-CMS-CSV-Export der Orte** und **(b) das Platzhalter-Textmuster
-   je Leistung** hoch (plus Logo/Farben/Kontaktdaten, wenn schon greifbar).
-2. Ich richte das **Astro-Grundgerüst** ein und baue **eine** vollständige Beispiel-Ortsseite
-   (z. B. Sanierung/[Musterort]) als abgestimmtes Template.
-3. Nach deinem „passt" generiere ich alle ~400 Seiten und wir gehen in die SEO-Härtung.
-
-**Sag mir, ob ich mit Schritt 2 (Grundgerüst + Beispielseite) schon starten soll** – dafür würden
-mir schon die bloßen URL-Slugs aus der Sitemap und ein Beispieltext genügen.
+1. **`mirror/` auf den Branch bringen** (siehe Abschnitt 2).
+2. Ich lese Farben/Fonts/Texte/Meta aus, baue **eine** Beispiel-Ortsseite
+   (`sanierung/<musterort>`) zur Abstimmung.
+3. Nach deinem „passt" → alle 356 Seiten + Phase 2.
