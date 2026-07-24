@@ -46,7 +46,11 @@ const faq = [
         <!-- TODO(Phase 4): Formular-Endpoint + Spam-Schutz + Consent anbinden -->
         <div id="w-node-e8c3b984-cd7a-a694-a808-ec14a2718881-f0fa7d27" class="card contact-form">
           <div class="contact-form-block w-form">
-            <form name="wf-form-Kontakt-Formular" method="get" class="contact-form-grid">
+            <form action="https://formsubmit.co/iwo@stolz-marketing.de" method="POST" class="contact-form-grid" data-ajax-form>
+              <input type="hidden" name="_subject" value="Neue Anfrage über hepabaut.de (Kontakt)" />
+              <input type="hidden" name="_template" value="table" />
+              <input type="hidden" name="_captcha" value="false" />
+              <input type="text" name="_honey" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true" />
               <div>
                 <label for="name">Name</label>
                 <input class="input small w-input" maxlength="256" name="name" placeholder="Ihr voller Name" type="text" id="name" required />
@@ -73,6 +77,16 @@ const faq = [
                 </div>
               </div>
             </form>
+            <div class="success-message w-form-done">
+              <div>
+                <div class="line-rounded-icon success-message-check large accent"></div>
+                <div class="heading-h3-size mg-bottom-6px">Dankeschön</div>
+                <div>Ihre Nachricht wurde übermittelt.<br />Wir werden uns innerhalb von 48 Stunden bei Ihnen melden.</div>
+              </div>
+            </div>
+            <div class="error-message w-form-fail">
+              <div>Leider ist etwas schiefgelaufen. Bitte probieren Sie es erneut oder kontaktieren Sie uns per E-Mail.</div>
+            </div>
           </div>
         </div>
       </div>
