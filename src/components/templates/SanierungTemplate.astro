@@ -1,0 +1,187 @@
+---
+// Sanierungs-Template (Übersicht /sanierung UND alle 117 Ortsseiten /sanierung/<ort>).
+// ort = null → Übersichtsseite (Text ohne Ort, H1-Akzent "Ihrer Stadt").
+// ort = "Heidelberg" → Ortsseite (Ort in H1-Akzent + an bestätigten Stellen im Text).
+// Layout & Klassen 1:1 aus mirror-v3/sanierung(.html|/abtsteinach.html).
+import UspGrid from '../UspGrid.astro';
+import LandingForm from '../LandingForm.astro';
+import FaqAccordion from '../FaqAccordion.astro';
+import { projekte } from '../../data/startseite';
+
+interface Props {
+  ort: string | null;
+}
+const { ort } = Astro.props;
+const isOverview = ort === null;
+const inOrt = isOverview ? '' : ` in ${ort}`;
+const ausOrt = isOverview ? '' : ` aus ${ort}`;
+const accent = isOverview ? 'Ihrer Stadt' : ort;
+// Hero-Lead: Original-Übersicht nutzt "Teil- &  Komplettsanierungen", Ortsseite "Komplettsanierungen".
+const heroLead = isOverview
+  ? 'Professionelle Teil- &  Komplettsanierungen von Wohnungen, Häusern und Gewerbeobjekten. Wir sind Ihr regionaler Handwerker'
+  : `Professionelle Komplettsanierungen von Wohnungen, Häusern und Gewerbeobjekten. Wir sind Ihr regionaler Handwerker${ausOrt}.`;
+
+const slides = [
+  { n: '01', img: 'img-1', title: 'Altbausanierung', text: `Aus alt wird neu: Wir machen Ihr Haus zukunftsfähig und wohnlich. Ihre Experten für Altbausanierung${inOrt}.` },
+  { n: '02', img: 'img-2', title: 'Bädersanierung', text: `Ihr neues Traumbad? Mit uns gelingt die Badsanierung${inOrt} stressfrei und sauber.` },
+  { n: '03', img: 'img-3', title: 'Kernsanierung', text: 'Wir übernehmen die komplette Kernsanierung – professionell koordiniert und fachgerecht umgesetzt.' },
+  { n: '04', img: '', title: 'Haussanierung', text: `Von Schönheitsreparaturen bis Komplettumbau – Wohnungssanierung${inOrt} mit System.` },
+];
+
+const faq = [
+  { q: 'Was genau fällt unter eine Sanierung?', a: 'Bei einer Sanierung werden bauliche oder technische Mängel behoben – dazu zählen z. B. neue Leitungen, Dämmung, Fenster, Bodenaufbau oder die Erneuerung der Bausubstanz. Oft geht sie tiefer als eine Renovierung und erfordert Fachwissen.' },
+  { q: `Wie lange dauert eine Sanierung${inOrt}?`, a: 'Die Dauer hängt stark vom Umfang ab. Eine Badsanierung dauert ca. 1–2 Wochen, eine komplette Wohnungssanierung 3–6 Wochen. Vor Beginn erhalten Sie einen klaren Zeitplan.' },
+  { q: 'Übernehmt ihr auch die komplette Altbausanierung?', a: 'Ja – wir sind auf Altbausanierungen spezialisiert. Dabei kümmern wir uns um Elektrik, Dämmung, Trockenbau, Böden, Wände, Bad und Küche. Alles wird auf Wunsch moderner Standard angepasst – unter Berücksichtigung der Altbausubstanz.' },
+  { q: 'Ist eine Besichtigung vor Ort notwendig?', a: 'Ja – um ein realistisches Angebot erstellen zu können, ist eine Vor-Ort-Besichtigung notwendig. Sie ist für Sie kostenlos und unverbindlich.' },
+  { q: 'Könnt ihr auch eine Kernsanierung übernehmen?', a: 'Ja, wir übernehmen vollständige Kernsanierungen inklusive Entkernung, Abbruch, Neubauplanung und Umsetzung – inklusive Koordination aller Gewerke.' },
+  { q: 'Wie finde ich heraus, ob mein Haus sanierungsbedürftig ist?', a: 'Typische Hinweise sind: Feuchtigkeitsschäden, marode Leitungen, alte Fenster, hohe Heizkosten, Schimmel oder Risse im Mauerwerk. Wir beraten Sie gern, was sinnvoll und wirtschaftlich ist.' },
+];
+---
+<!-- Hero v1 (2-Spalten: Text links, Bild rechts) -->
+<section class="section hero v1">
+  <div class="w-layout-blockcontainer container-default w-container">
+    <div class="w-layout-grid grid-2-columns hero-v1-grid">
+      <div id="w-node-_24f6c0e4-94ca-1c61-a20c-660646eb62ee-f0fa7d62" class="inner-container _457px _100-tablet">
+        <div class="inner-container _700px---tablet">
+          <div class="inner-container _600px---mbl">
+            <h1 class="display-1 mg-bottom-24px">
+              <span>Sanierungen in </span>{!isOverview && <span class="span hidden"><span class="green-bg">{ort}</span></span>}<span class="span"><span class="color-accent-1">{accent}</span></span>
+              <div class="display-10 mg-top-4px">Zuverlässig &amp; ohne Kopfschmerzen</div>
+            </h1>
+            <p class="mg-bottom-40px">{heroLead}</p>
+            <div class="buttons-row">
+              <a href="/kontakt" class="btn-primary w-inline-block">
+                <div class="flex-horizontal"><div>Kontaktformular</div><div class="arrow-icon">&#xE900;</div></div>
+              </a>
+              <a href="tel:+4962061857728" class="cta-telefonnummer w-inline-block">
+                <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/682f0a2854d6f9fb2051432f_phone-call.png" loading="lazy" alt="" class="image-3" />
+                <p class="cta-telefonnummer black">+49 6209 298 16 78</p>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="w-node-_24f6c0e4-94ca-1c61-a20c-660646eb6309-f0fa7d62" class="inner-container _630px width-100 _100-tablet">
+        <div class="image-wrapper border-radius-12px hero-v1-image">
+          <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/682c9dfc4168c06f6465c915_jessica-hearn-ut6gWxh3oqQ-unsplash.jpg" loading="eager" alt="" class="fit-cover _w-h-100" />
+        </div>
+      </div>
+      <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/6843e1fb0c594ff3df23d049_unterstrichen-hepa.svg" loading="lazy" alt="" class="image-6 hidden" />
+    </div>
+  </div>
+  <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/67eacdeb6f6d737ef0fa7e7a_line-hero-about-startply-x-webflow-template.svg" loading="eager" alt="" class="position-absolute hero-v1-bg" />
+</section>
+
+<!-- Unsere Leistungen (CSS-Scroll-Carousel statt webflow-Slider) -->
+<section class="section-5 pd-top-0px">
+  <div class="container-default-7 overflow-hidden mb-none-overflow-hidden w-container">
+    <div class="inner-container _574px center">
+      <div class="inner-container _500px---tablet center">
+        <div class="inner-container _400px---mbl center">
+          <div class="inner-container _350px---mbp center">
+            <div class="text-center-4 mg-bottom-40px">
+              <div class="accent-line-2 center"></div>
+              <h2 class="display-18">Unsere Leistungen</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="san-slider">
+      {slides.map((s) => (
+        <div class="slider-full-image slider---2-col san-slide">
+          <div class:list={['inner-container content-slider-wrapper', s.img]}>
+            <div class="slider-number-top-wrapper"><div class="display-16 color-neutral-804">{s.n}</div></div>
+            <div class="slider-content-bottom-wrapper">
+              <div class="inner-container _454px">
+                <h3 class="display-17 color-neutral-804 mg-bottom-16px">{s.title}</h3>
+                <p class="color-neutral-804">{s.text}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+    <div class="mg-top-32px">
+      <div class="buttons-row center">
+        <a href="/kontakt" class="btn-primary button-row w-inline-block">
+          <div class="flex-horizontal"><div>Kontaktieren</div><div class="arrow-icon">&#xE900;</div></div>
+        </a>
+        <a href="tel:+4962061857728" class="cta-telefonnummer white w-inline-block">
+          <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/682f0a2854d6f9fb2051432f_phone-call.png" loading="lazy" alt="" class="image-3 invert" />
+          <p class="cta-telefonnummer white">+49 6209 298 16 78</p>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Projekte -->
+<div class="mg-section bg-neutral-300">
+  <section class="section pd-230px pd-top-104px custom">
+    <div class="w-layout-blockcontainer container-default w-container">
+      <div class="inner-container _500px---mbl">
+        <div class="z-index-1">
+          <div class="mg-bottom-64px">
+            <div class="inner-container _513px _100-mbl">
+              <div class="inner-container _450px---tablet _100-mbl">
+                <div class="accent-line"></div>
+                <h2 class="display-2 mg-bottom-0">Projekte</h2>
+              </div>
+            </div>
+          </div>
+          <div class="w-dyn-list">
+            <div role="list" class="collection-list w-dyn-items">
+              {projekte.map((bild) => (
+                <div role="listitem" class="w-dyn-item">
+                  <a href={encodeURI(bild)} target="_blank" rel="noopener" class="projekte-lightbox w-inline-block">
+                    <img src={encodeURI(bild)} loading="lazy" alt="" class="projekte-lightbox-bild" />
+                  </a>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Rückruf-Formular -->
+<div>
+  <LandingForm title="Rückruf vereinbaren" />
+</div>
+
+<!-- USP -->
+<UspGrid
+  heading="Hepa Baut: Sauber, Zuverlässig und on-time"
+  headingSpanClass="span-2"
+  ctaVariant="buttons-row-phone"
+  ctaLabel="Kontaktieren"
+  telHref="tel:+4962061857728"
+  nodeIds={['w-node-_24f6c0e4-94ca-1c61-a20c-660646eb6323-f0fa7d62', 'w-node-_24f6c0e4-94ca-1c61-a20c-660646eb6333-f0fa7d62']}
+/>
+
+<!-- FAQ (v1) -->
+<FaqAccordion heading={`Oft gestellte Fragen zu Sanierungen`} items={faq} />
+
+<style is:global>
+  /* CSS-only Ersatz für den Webflow-Slider: 2 Slides sichtbar, horizontal swipebar */
+  .san-slider {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc(50% - 16px);
+    gap: 32px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 8px;
+  }
+  .san-slide {
+    scroll-snap-align: start;
+    position: relative;
+    height: 700px;
+  }
+  @media screen and (max-width: 767px) {
+    .san-slider { grid-auto-columns: 100%; }
+  }
+</style>

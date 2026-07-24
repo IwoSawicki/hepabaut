@@ -1,12 +1,10 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import LeistungPage from '../../components/LeistungPage.astro';
-import { leistungenBySlug } from '../../data/leistungen';
-const l = leistungenBySlug['wasserschaden'];
+import WasserschadenTemplate from '../../components/templates/WasserschadenTemplate.astro';
 ---
 <BaseLayout
   title="Wasserschäden - Hepa Baut"
   description="Wasserschaden? Schnelle Hilfe: Schadensaufnahme, Trocknung von Böden & Wänden, Schimmelbehandlung und Wiederherstellung – alles aus einer Hand."
 >
-  <LeistungPage leistung={l} ortName="Ihrer Stadt" />
+  <WasserschadenTemplate ort={null} />
 </BaseLayout>

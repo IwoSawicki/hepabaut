@@ -1,10 +1,18 @@
 ---
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import LeistungPage from '../../components/LeistungPage.astro';
+import SanierungTemplate from '../../components/templates/SanierungTemplate.astro';
+import RenovierungTemplate from '../../components/templates/RenovierungTemplate.astro';
+import WasserschadenTemplate from '../../components/templates/WasserschadenTemplate.astro';
 import { leistungen, withOrt } from '../../data/leistungen';
 import { orte } from '../../data/orte';
 import { site } from '../../data/site';
+
+const TEMPLATES = {
+  sanierung: SanierungTemplate,
+  renovierung: RenovierungTemplate,
+  wasserschaden: WasserschadenTemplate,
+} as const;
 
 // Kartesisches Produkt: 3 Leistungen × 117 Orte = 351 Seiten.
 export const getStaticPaths = (() => {
@@ -19,6 +27,7 @@ export const getStaticPaths = (() => {
 const { leistungSlug, ortSlug } = Astro.props as { leistungSlug: string; ortSlug: string };
 const l = leistungen.find((x) => x.slug === leistungSlug)!;
 const o = orte.find((x) => x.slug === ortSlug)!;
+const Template = TEMPLATES[leistungSlug as keyof typeof TEMPLATES];
 
 const title = withOrt(l.titleTemplate, o.name);
 const description = withOrt(l.metaDescriptionTemplate, o.name);
@@ -67,5 +76,5 @@ if (l.faq.length > 0) {
 }
 ---
 <BaseLayout title={title} description={description} jsonLd={jsonLd}>
-  <LeistungPage leistung={l} ortName={o.name} />
+  <Template ort={o.name} />
 </BaseLayout>

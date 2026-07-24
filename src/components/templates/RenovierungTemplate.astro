@@ -1,0 +1,105 @@
+---
+// Renovierungs-Template (Übersicht /renovierung + 117 Ortsseiten). Layout 1:1 aus mirror-v3.
+import UspGrid from '../UspGrid.astro';
+import LandingForm from '../LandingForm.astro';
+import FaqAccordionV2 from '../FaqAccordionV2.astro';
+import VorherNachher from '../VorherNachher.astro';
+
+interface Props {
+  ort: string | null;
+}
+const { ort } = Astro.props;
+const isOverview = ort === null;
+const inOrt = isOverview ? '' : ` in ${ort}`;
+const accent = isOverview ? 'Ihrer Stadt' : ort;
+
+const cards = [
+  { n: '_01', title: 'Maler- und Tapezierarbeiten', text: `Maler- und Tapezierarbeiten${inOrt} – schnell, sauber und professionell.`, node: 'w-node-_2d04aa6a-11e5-73c6-c438-f4c368c82a1b-f0fa7d0d' },
+  { n: '_02', title: 'Boden verlegen / Bodenrenovierung', text: 'Neuer Boden – neues Wohngefühl. Fachgerechte Verlegung inklusive Untergrundvorbereitung.', node: 'w-node-_2d04aa6a-11e5-73c6-c438-f4c368c82a1f-f0fa7d0d' },
+  { n: '_03', title: 'Schönheitsreparaturen', text: 'Kleine Mängel? Wir erledigen alles, was für einen guten Eindruck nötig ist.', node: 'w-node-_2d04aa6a-11e5-73c6-c438-f4c368c82a23-f0fa7d0d' },
+  { n: '_04', title: 'Innenräume renovieren', text: `Wir renovieren Ihre Wohnräume${inOrt} – stilvoll, pünktlich und sauber.`, node: 'w-node-_2d04aa6a-11e5-73c6-c438-f4c368c82a27-f0fa7d0d' },
+  { n: '_05', title: 'Fenster- und Türeinbau', text: 'Neue Fenster und Türen steigern Wohnkomfort und senken Energiekosten – wir bauen sauber und zuverlässig ein.', node: 'w-node-_2d04aa6a-11e5-73c6-c438-f4c368c82a2b-f0fa7d0d' },
+];
+
+const faq = [
+  { q: 'Was kostet eine Wohnungsrenovierung ungefähr?', a: 'Die Kosten hängen stark vom Umfang ab – also wie viele Räume betroffen sind, ob neue Böden, Malerarbeiten oder zusätzliche Reparaturen nötig sind. Ein einzelnes Zimmer beginnt bei ein paar hundert Euro, eine komplette Wohnung kann mehrere Tausend Euro kosten. Wir besichtigen das Objekt vorab kostenlos und machen Ihnen ein faires, transparentes Angebot.' },
+  { q: 'Wie schnell könnt ihr mit der Renovierung beginnen?', a: 'In der Regel können wir kurzfristig starten – je nach Umfang meist innerhalb von 1–2 Wochen nach Angebotsfreigabe. Bei kleineren Projekten sogar früher. Wir sagen Ihnen ehrlich, was realistisch ist, und halten uns an zugesagte Termine.' },
+  { q: 'Kann ich während der Renovierung in der Wohnung bleiben?', a: 'Oft ja – zum Beispiel bei Malerarbeiten oder Bodenverlegung in einzelnen Räumen. Bei umfangreicheren Renovierungen (z. B. mehrere Räume gleichzeitig, viel Staub oder Lärm) empfehlen wir, währenddessen auszuweichen. Wir besprechen das vorab mit Ihnen und planen die Arbeiten so, dass sie möglichst wenig stören.' },
+  { q: 'Was muss ich vor der Renovierung vorbereiten?', a: 'Im Idealfall räumen Sie die betroffenen Räume leer oder decken Möbel ab – wir bringen bei Bedarf Schutzmaterial mit. Alles Weitere – Abklebearbeiten, Abdeckungen, Staubschutz – übernehmen wir. Wir helfen auch gerne beim Ausräumen oder Umstellen, wenn es nötig ist.' },
+  { q: 'Was passiert, wenn während der Renovierung etwas entdeckt wird, das nicht geplant war?', a: 'Das kann passieren, zum Beispiel bei versteckten Schäden oder feuchtem Putz. In dem Fall sprechen wir das sofort offen mit Ihnen durch, machen Lösungsvorschläge und passen das Angebot nur nach Absprache an. Transparenz ist uns hier sehr wichtig.' },
+  { q: 'Macht ihr auch kleinere Arbeiten oder nur Komplettsanierungen?', a: 'Auch kleine Renovierungsarbeiten sind willkommen – etwa ein einzelnes Zimmer streichen, neue Fußleisten anbringen oder einen alten Boden austauschen. Sie müssen kein Großprojekt beauftragen, um mit uns arbeiten zu können.' },
+];
+---
+<!-- Hero v25 (zentriert) + Formular -->
+<LandingForm withEmail={true}>
+  <div slot="above-form" class="mg-bottom-32px">
+    <div class="inner-container _760px center custom-with">
+      <div class="text-center-4">
+        <h1 class="display-19"><span>Renovierung in </span><span class="color-accent-1">{accent}</span></h1>
+        <h1 class="display-8">Professionell &amp; ohne Kopfschmerzen</h1>
+        <div class="inner-container _666px center">
+          <div class="buttons-row flex-horizontal custom">
+            <a href="/kontakt" class="btn-primary w-inline-block">
+              <div class="flex-horizontal"><div>Angebot sichern</div><div class="arrow-icon">&#xE900;</div></div>
+            </a>
+            <div class="cta-telefonnummer">
+              <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/682f0a2854d6f9fb2051432f_phone-call.png" loading="lazy" alt="" class="image-3" />
+              <p class="cta-telefonnummer">+49 6209 298 16 78</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</LandingForm>
+
+<!-- Unsere Leistungen (Bild-Karten-Grid) -->
+<section class="section">
+  <div class="container-default overflow-hidden mb-none-overflow-hidden w-container">
+    <div class="w-layout-grid grid-2-columns gap-32px _1-col-tablet">
+      <div id="w-node-_2d04aa6a-11e5-73c6-c438-f4c368c82a09-f0fa7d0d" class="inner-container _519px">
+        <div class="mg-bottom-20px---tablet">
+          <div class="accent-line"></div>
+          <h2 class="display-2">Unsere Leistungen</h2>
+          <p class="mg-bottom-32px">Ob akuter Wasserschaden oder schon länger bestehende Feuchtigkeit – wir kümmern uns um die fachgerechte Trocknung, Sanierung und Wiederherstellung.</p>
+          <div class="buttons-row gap-16px">
+            <a href="/kontakt" class="btn-primary w-inline-block">
+              <div class="flex-horizontal"><div>Angebot einholen</div><div class="arrow-icon">&#xE900;</div></div>
+            </a>
+            <div class="cta-telefonnummer">
+              <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/682f0a2854d6f9fb2051432f_phone-call.png" loading="lazy" alt="" class="image-3" />
+              <p class="cta-telefonnummer">+49 6209 298 16 78</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      {cards.map((c) => (
+        <div id={c.node} class:list={['card full-image', c.n]}>
+          <div class="inner-container _600px---tablet">
+            <h3 class="display-4 color-neutral-100 mg-bottom-16px">{c.title}</h3>
+            <p class="color-neutral-804">{c.text}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- Vorher / Nachher -->
+<VorherNachher />
+
+<!-- Zweites Rückruf-Formular -->
+<LandingForm title="Rückruf vereinbaren" sectionClass="section-5 hero v25 pb-custom" />
+
+<!-- USP (transparent) -->
+<UspGrid
+  heading="Hepa Baut: Sauber, Zuverlässig und on-time"
+  articleClass="section pd-120px bg-transparent"
+  ctaVariant="buttons-row-only"
+  ctaLabel="Kontaktformular"
+  ctaBtnClass="btn-primary-2 w-inline-block"
+  nodeIds={['w-node-bb7e5b09-e7c9-74f9-8ff1-54bc245b3ab6-f0fa7d0d', 'w-node-bb7e5b09-e7c9-74f9-8ff1-54bc245b3ac6-f0fa7d0d']}
+/>
+
+<!-- FAQ v2 -->
+<FaqAccordionV2 heading="Noch Fragen offen?" items={faq} />

@@ -1,0 +1,130 @@
+---
+// Wasserschaden-Template (Übersicht /wasserschaden + 117 Ortsseiten). Layout 1:1 aus mirror-v3.
+// Kein FAQ auf dieser Leistung (wie im Original).
+import UspGrid from '../UspGrid.astro';
+import LandingForm from '../LandingForm.astro';
+
+interface Props {
+  ort: string | null;
+}
+const { ort } = Astro.props;
+const isOverview = ort === null;
+
+const cards = [
+  { n: '_01', title: 'Wasserschadensanierung', node: 'w-node-c1cbf613-8b19-7204-b40c-a0edd5a1fde7-f0fa7d49' },
+  { n: '_02', title: 'Trocknung von Böden & Wänden', node: 'w-node-c1cbf613-8b19-7204-b40c-a0edd5a1fdeb-f0fa7d49' },
+  { n: '_03', title: 'Schimmelvermeidung & -behandlung', node: 'w-node-c1cbf613-8b19-7204-b40c-a0edd5a1fdef-f0fa7d49' },
+  { n: '_04', title: 'Rückbau & Wiederherstellung (z. B. Putz, Boden, Farbe)', node: 'w-node-c1cbf613-8b19-7204-b40c-a0edd5a1fdf3-f0fa7d49' },
+  { n: '_05', title: 'Koordination mit Versicherung (falls gewünscht)', node: 'w-node-c1cbf613-8b19-7204-b40c-a0edd5a1fdf7-f0fa7d49' },
+];
+
+const steps = [
+  { title: 'Wasserzufuhr stoppen', text: 'Drehen Sie sofort den Hauptwasserhahn zu, um weiteren Schaden zu verhindern – besonders bei Rohrbrüchen oder defekten Anschlüssen.', tip: '🛠️ Tipp: Der Hauptwasserhahn befindet sich meist im Keller, im Hauswirtschaftsraum oder dort, wo die Wasseruhr sitzt.' },
+  { title: 'Strom abstellen', text: 'Sichern Sie sich ab, indem Sie betroffene Stromkreise oder die Hauptsicherung abschalten – bei durchnässten Wänden oder Böden besteht Stromschlaggefahr.', tip: '⚡ Tipp: Der Sicherungskasten befindet sich meist im Flur, Keller oder Hausanschlussraum – oft in einem grauen Kasten an der Wand.' },
+  { title: 'Schaden dokumentieren (Fotos)', text: 'Machen Sie Fotos oder Videos vom Schaden – das hilft später bei der Abwicklung mit Ihrer Versicherung.' },
+  { title: 'Kontakt zu uns aufnehmen', text: 'Je früher wir da sind, desto mehr lässt sich retten. Rufen Sie uns an oder schreiben Sie uns – wir kümmern uns um den Rest.', last: true },
+];
+---
+<!-- Hero v25 + Formular -->
+<section class="section hero v25">
+  <LandingForm withEmail={true}>
+    <div slot="above-form" class="mg-bottom-32px">
+      <div class="inner-container">
+        <div class="text-center-4">
+          <h1 class="display-19 custom">
+            {isOverview
+              ? (<><span class="color-accent-1">Wasserschaden?</span><span> Wir helfen schnell &amp; zuverlässig</span></>)
+              : (<><span>Wasserschaden in </span><span class="color-accent-1">{ort}</span><span>?</span></>)}
+          </h1>
+          <h1 class="custom-size">Von der Schadensaufnahme bis zur kompletten Trocknung und Sanierung<br /> – alles aus einer Hand</h1>
+          <div class="inner-container _666px center">
+            <div class="buttons-row flex-horizontal custom">
+              <a href="/kontakt" class="btn-primary w-inline-block">
+                <div class="flex-horizontal"><div>Hilfe anfordern</div><div class="arrow-icon">&#xE900;</div></div>
+              </a>
+              <a href="tel:+4962092981678" class="cta-telefonnummer w-inline-block">
+                <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/682f0a2854d6f9fb2051432f_phone-call.png" loading="lazy" alt="" class="image-3" />
+                <p class="cta-telefonnummer">+49 6209 298 16 78</p>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </LandingForm>
+</section>
+
+<!-- Erste Hilfe (Prozess-Liste) -->
+<section class="mg-bottom-111px pd-top-60">
+  <div class="w-layout-blockcontainer main-container bg-green w-container">
+    <div class="center-heading mg-bottom-80">
+      <div class="text-center-5">
+        <div class="accent-line-2 center"></div>
+        <h2 class="display-20">Erste Hilfe. <br />Das müssen sie jetzt tun:</h2>
+      </div>
+    </div>
+    <div class="master-process">
+      {steps.map((s) => (
+        <div class="single-process">
+          <div class="left-process">
+            <div class="process-circle"><div class="fill-circle"></div></div>
+            {!s.last && <div class="line-process"><div class="fill-line"></div></div>}
+          </div>
+          <div class:list={['right-process', s.last && 'last-process']}>
+            <h3 class="no-margins">{s.title}</h3>
+            <p set:html={s.tip ? `${s.text}<br /><em>${s.tip}</em>` : s.text}></p>
+          </div>
+        </div>
+      ))}
+      <div class="buttons-row flex-horizontal custom">
+        <a href="/kontakt" class="btn-primary w-inline-block">
+          <div class="flex-horizontal"><div>Hilfe anfordern</div><div class="arrow-icon">&#xE900;</div></div>
+        </a>
+        <a href="tel:+4962092981678" class="cta-telefonnummer w-inline-block">
+          <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/682f0a2854d6f9fb2051432f_phone-call.png" loading="lazy" alt="" class="image-3" />
+          <p class="cta-telefonnummer">+49 6209 298 16 78</p>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Unsere Leistungen (Bild-Karten) -->
+<section class="section">
+  <div class="container-default overflow-hidden mb-none-overflow-hidden w-container">
+    <div class="w-layout-grid grid-2-columns gap-32px _1-col-tablet">
+      <div id="w-node-c1cbf613-8b19-7204-b40c-a0edd5a1fdd5-f0fa7d49" class="inner-container _519px">
+        <div class="mg-bottom-20px---tablet">
+          <div class="accent-line"></div>
+          <h2 class="display-2">Unsere Leistungen</h2>
+          <p class="mg-bottom-32px">Ob akuter Wasserschaden oder schon länger bestehende Feuchtigkeit – wir kümmern uns um die fachgerechte Trocknung, Sanierung und Wiederherstellung.</p>
+          <div class="buttons-row gap-16px">
+            <a href="/kontakt" class="btn-primary w-inline-block">
+              <div class="flex-horizontal"><div>Hilfe anfordern</div><div class="arrow-icon">&#xE900;</div></div>
+            </a>
+            <a href="tel:+4962092981678" class="cta-telefonnummer w-inline-block">
+              <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/682f0a2854d6f9fb2051432f_phone-call.png" loading="lazy" alt="" class="image-3" />
+              <p class="cta-telefonnummer">+49 6209 298 16 78</p>
+            </a>
+          </div>
+        </div>
+      </div>
+      {cards.map((c) => (
+        <div id={c.node} class:list={['card full-image', c.n]}>
+          <div class="inner-container _600px---tablet">
+            <h3 class="display-4 color-neutral-100 mg-bottom-16px">{c.title}</h3>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- USP -->
+<UspGrid
+  heading="Hepa Baut: Sauber, Zuverlässig und on-time"
+  ctaVariant="buttons-row-only"
+  ctaLabel="Kontaktformular"
+  ctaBtnClass="btn-primary button-row w-inline-block"
+  nodeIds={['w-node-cc1854d5-f0a8-3ee3-872e-210b52ad1faf-f0fa7d49', 'w-node-cc1854d5-f0a8-3ee3-872e-210b52ad1fbf-f0fa7d49']}
+/>

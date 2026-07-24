@@ -9,9 +9,11 @@ interface Props {
   description?: string;
   /** JSON-LD Objekte, die in den <head> geschrieben werden. */
   jsonLd?: Record<string, unknown>[];
+  /** overlay = transparenter Header über dunklem Hero (Startseite); solid = Innenseiten. */
+  headerVariant?: 'overlay' | 'solid';
 }
 
-const { title, description, jsonLd = [] } = Astro.props;
+const { title, description, jsonLd = [], headerVariant = 'solid' } = Astro.props;
 // Saubere Canonical ohne .html / Trailing-Slash — muss 1:1 zur Original-URL passen (ranking-kritisch).
 const cleanPath =
   Astro.url.pathname.replace(/index\.html$/, '').replace(/\.html$/, '').replace(/\/+$/, '') || '/';
@@ -42,7 +44,7 @@ const canonical = new URL(cleanPath, Astro.site).href.replace(/\/$/, cleanPath =
   </head>
   <body>
     <div class="page-wrapper">
-      <Header />
+      <Header variant={headerVariant} />
       <main>
         <slot />
       </main>
