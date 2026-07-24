@@ -25,6 +25,8 @@ const canonical = new URL(cleanPath, Astro.site).href.replace(/\/$/, cleanPath =
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
     <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/cdn/67eacdeb6f6d737ef0fa7cd2/67eacdeb6f6d737ef0fa7f06_favicon-hepasolar.png" />
+    <link rel="apple-touch-icon" href="/cdn/67eacdeb6f6d737ef0fa7cd2/67eacdeb6f6d737ef0fa7f07_touchicon-hepasolar.png" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -38,11 +40,13 @@ const canonical = new URL(cleanPath, Astro.site).href.replace(/\/$/, cleanPath =
       <script type="application/ld+json" set:html={JSON.stringify(obj)} />
     ))}
   </head>
-  <body class="min-h-screen bg-white antialiased">
-    <Header />
-    <main>
-      <slot />
-    </main>
-    <Footer />
+  <body>
+    <div class="page-wrapper">
+      <Header />
+      <main>
+        <slot />
+      </main>
+      <Footer />
+    </div>
   </body>
 </html>

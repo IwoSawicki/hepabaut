@@ -107,10 +107,40 @@ verarbeiten. Stattdessen pro Section, die gerade gebaut wird:
 2. Gezielt nur diese Klassen im CSS nachschlagen (`grep -n "^\.klassenname"`).
 3. Werte als Tailwind-Utility oder Theme-Token übernehmen — exakt, keine Rundung.
 
+## Styling-Architektur (1:1-Nachbau — so umgesetzt)
+
+- `src/styles/webflow.css` — aus dem Original-CSS **maschinell gepurgte** Regeln (nur benutzte
+  Klassen; inkl. Normalize, @font-face, :root-Tokens, alle Media-Queries, `#w-node-…`-Grid-Regeln).
+  Komponenten nutzen die **Original-Klassennamen** → garantiert Pixel-Parität.
+  Werte hier nie von Hand ändern; bei Bedarf neu aus `mirror-v3` extrahieren.
+- Tailwind-Utilities sind mit **`tw:`-Präfix** eingebunden (`prefix(tw)` in `global.css`), weil
+  Webflow-Klassennamen mit Tailwind kollidieren (`.gap-20`: Webflow 30px vs. Tailwind 5rem!).
+  Neue Komponenten/Landingpages: `tw:flex`, `tw:gap-4` …
+- Original-`id="w-node-…"`-Attribute sind ranking-/layout-relevant (Grid-Placement via ID-Selektor,
+  auch responsive). Beim Nachbau neuer Sections aus dem Mirror **mit übernehmen**.
+- Webflow-JS wird nicht ausgeliefert. JS-Verhalten ersetzt durch: CSS-Checkbox-Toggle (Mobile-Menü,
+  `Header.astro`), `<details>/<summary>` (FAQ, `FaqAccordion.astro`). Scroll-Animationen (Fade-ins)
+  entfallen bewusst — Endzustand identisch.
+- Icon-Fonts: Glyphen als HTML-Entities schreiben (`&#xE900;` Pfeil, `&#xE811;` FAQ-Plus,
+  `&#xE810;/&#xE807;/&#xE819;` Social). Texte enthalten tw. **NBSP** (`&nbsp;`) — beim Übernehmen
+  aus dem Mirror die Codepoints prüfen, sie beeinflussen Zeilenumbrüche (H1 Startseite!).
+- Bilder: 1:1 unter `public/cdn/<webflow-ordner>/<originaldatei>` (Hash-Namen beibehalten).
+  `srcset` der Originale wird in Phase 1 weggelassen (nur `src`) — Phase 2: `astro:assets`.
+  Bekannte Original-Bugs, bewusst NICHT repliziert: EXIF-Rotation der CDN-Varianten (Projekte-
+  Galerie mobil) — unser Nachbau zeigt die Fotos korrekt gedreht.
+
+## Visuelle Verifikation (Werkzeug)
+
+`scripts/shot.mjs` screenshottet Original (mirror-v3 via lokalem Server, Port 4323) und Nachbau
+(`npm run preview`, Port 4321) und vergleicht — `W=<breite>` als Env. SRI-`integrity`-Attribute
+müssen beim lokalen Original gestrippt werden (wget hat Dateien verändert). Verifiziert für die
+Startseite: 1440/991/767/479/375 px pixelgleich (Restdiffs = Mirror-Artefakte: 1 kaputtes Bild
+im Mirror, EXIF-Rotation).
+
 ## Tech-Stack
 
 - **Astro v5** (statischer Output, `build.format: 'directory'` → saubere URLs), **Tailwind CSS 4**
-  (`@tailwindcss/vite`, Tokens über `@theme` in `src/styles/global.css`).
+  (`@tailwindcss/vite`, Tokens über `@theme` in `src/styles/global.css`, Utilities mit `tw:`-Präfix).
 - Inhalte datengetrieben:
   - `src/data/orte.csv` — 117 Orte (Slug, Anzeigename). **Primäre Pflege-Datei.**
   - `src/data/orte.ts` — lädt `orte.csv` zur Build-Zeit (`?raw`-Import, kein Laufzeit-Dateisystem).
@@ -166,6 +196,11 @@ npm run preview   # Build lokal prüfen
 - [x] Astro + Tailwind 4 Grundgerüst; datengetriebenes Modell, Orte jetzt **CSV-basiert**.
 - [x] Alle Seiten generiert & Build grün: **358 Seiten**, saubere URLs, Sitemap, JSON-LD.
 - [x] Design-Tokens aus Original-CSS identifiziert (Farben, Font „Onest", Breakpoints, Typo-Skala).
-- [ ] **Visuelles 1:1 pro Section**: echte Farben/Fonts/Abstände/Bilder einsetzen — Schritt für
-      Schritt, beginnend mit der Startseite (siehe `plan.md`).
+- [x] **Startseite visuell 1:1** (Screenshot-Diff-verifiziert auf 5 Breakpoints): Header/Nav mit
+      CSS-Mobile-Menü, Hero, Leistungs-Kacheln, USP-Grid, Projekte, Vorher/Nachher, CTA-Bänder,
+      FAQ (details/summary), Footer. Wiederverwendbare Sections in `src/components/`.
+- [ ] Leistungs-Übersichten (`/sanierung`, `/renovierung`, `/wasserschaden`) visuell 1:1
+      (gleiches Vorgehen: Markup aus mirror-v3, Sections wiederverwenden).
+- [ ] Ortsseiten-Template (`LeistungPage.astro`) visuell 1:1 gegen die Beispiel-Ortsseiten.
+- [ ] Kontakt / Impressum / Datenschutz visuell 1:1.
 - [ ] SEO-Härtung Phase 2 / Launch Phase 3 / Ads-Landingpages Phase 4 (siehe `plan.md`).

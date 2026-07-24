@@ -1,0 +1,60 @@
+---
+// Leistungs-Kacheln (Startseite section-3): 3 Bild-Karten mit Overlay + „Mehr erfahren".
+// Markup 1:1 aus mirror-v3 (testimonials-wrapper-2 Klassen sind Webflow-Namen des Templates).
+import { leistungsKacheln } from '../data/startseite';
+
+interface Props {
+  heading: string;
+  intro: string;
+}
+const { heading, intro } = Astro.props;
+---
+<div class="mg-section-2">
+  <section class="section-3 position-relative">
+    <div class="container-default-6 w-container">
+      <div>
+        <div class="inner-container _500px---mbl center">
+          <div class="inner-container _800px center">
+            <div class="text-center-4 mg-bottom-40px">
+              <div class="accent-line-2 center"></div>
+              <h2 class="display-13">&quot;{heading}&quot;</h2>
+              <div class="inner-container _454px center">
+                <p>{intro}</p>
+              </div>
+            </div>
+          </div>
+          <div class="w-layout-grid grid-3-columns">
+            {leistungsKacheln.map((k, i) => (
+              // 3. Kachel: Original-Node-ID steuert via #w-node-CSS das Tablet-Layout (span 2, zentriert)
+              <a
+                href={k.href}
+                id={i === 2 ? 'w-node-_4ca41987-7e38-853a-b603-76187363c0a1-f0fa7cd8' : undefined}
+                class:list={['testimonials-wrapper-2', i === 2 && 'last', 'w-inline-block']}
+              >
+                <img sizes="100vw" alt={k.alt} src={encodeURI(k.bild)} class="fit-cover _w-h-100" />
+                <div class="testimonials-text-wrapper">
+                  <div class="testimonials-content">
+                    <h3 class="display-14 color-neutral-802 mg-bottom-16px">{k.titel}</h3>
+                    <div class="flex-horizontal flex-start">
+                      <div class="text-block-2 white">Mehr erfahren</div>
+                      <div class="arrow-icon black">&#xE900;</div>
+                    </div>
+                    <div class="divider _0px---32px"></div>
+                  </div>
+                  <div class="bg-overlay-gradient testimonials"></div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex-horizontal gap-20 mg-top-32px">
+      <a href="/kontakt" target="_blank" class="btn-primary-4 w-button">Unverbindlich Anfragen</a>
+      <a href="tel:+4962061857728" class="cta-telefonnummer w-inline-block">
+        <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/682f0a2854d6f9fb2051432f_phone-call.png" loading="lazy" alt="" class="image-3" />
+        <p class="cta-telefonnummer black">+49 6209 298 16 78</p>
+      </a>
+    </div>
+  </section>
+</div>

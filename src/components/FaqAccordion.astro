@@ -1,0 +1,72 @@
+---
+// FAQ-Akkordeon 1:1 (accordion-item-wrapper aus mirror-v3), aber CSS-only:
+// Original togglet per webflow.js — hier <details>/<summary> mit identischer Optik.
+import type { FaqItem } from '../data/leistungen';
+
+interface Props {
+  heading: string;
+  items: FaqItem[];
+}
+const { heading, items } = Astro.props;
+---
+{items.length > 0 && (
+  <section class="section pd-150px">
+    <div class="container-default w-container">
+      <div class="inner-container _574px center">
+        <div class="text-center mg-bottom-40px">
+          <div class="accent-line center"></div>
+          <h2 class="display-2 mg-bottom-0">{heading}</h2>
+        </div>
+      </div>
+      <div class="inner-container _990px center">
+        <div class="w-layout-grid grid-1-column gap-row-32px">
+          {items.map((item) => (
+            <details class="accordion-item-wrapper faq-details">
+              <summary class="faq-summary">
+                <div class="accordion-content-wrapper">
+                  <div class="accordion-header">
+                    <h3 class="accordion-title display-4">{item.q}</h3>
+                  </div>
+                </div>
+                <div class="accordion-side">
+                  <div class="btn-circle-secondary small accordion-btn">
+                    <div class="line-icon-btn">&#xE811;</div>
+                  </div>
+                </div>
+              </summary>
+              <div class="acordion-body">
+                <div class="accordion-spacer"></div>
+                <div class="inner-container _610px">
+                  <p class="mg-bottom-0">{item.a}</p>
+                </div>
+              </div>
+            </details>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+)}
+
+<style is:global>
+  /* details/summary-Anpassung: Optik identisch zum Webflow-Akkordeon */
+  details.faq-details {
+    display: block; /* wrapper war flex row → übernimmt jetzt die summary */
+  }
+  .faq-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    list-style: none;
+  }
+  .faq-summary::-webkit-details-marker {
+    display: none;
+  }
+  details.faq-details .line-icon-btn {
+    transition: transform 0.3s;
+  }
+  details.faq-details[open] .line-icon-btn {
+    transform: rotate(135deg);
+  }
+</style>

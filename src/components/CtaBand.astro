@@ -1,0 +1,45 @@
+---
+// Dunkles CTA-Band (section pd-188px, mg-section cta) — 1:1 aus mirror-v3.
+// Wiederverwendbar: Überschrift (optional mit Zusatz-Zeile), Telefon-Link ein/aus.
+interface Props {
+  heading: string;
+  /** z. B. „-Fam. Schneider, Weinheim" — als text-span-2 unter der Überschrift */
+  subline?: string;
+  showPhone?: boolean;
+}
+const { heading, subline, showPhone = true } = Astro.props;
+---
+<div class="mg-section cta">
+  <section class="section pd-188px">
+    <div class="container-default z-index-1 w-container">
+      <div class="inner-container center cta-breite">
+        <div class="text-center">
+          <h2 class="display-2 color-neutral-100 mg-bottom-32px">
+            {heading}
+            {subline && (
+              <>
+                <br />
+                <span class="text-span-2">{subline}</span>
+              </>
+            )}
+          </h2>
+          <div class:list={[showPhone ? 'flex-horizontal gap-20 mg-top-32px' : 'buttons-row center button-row']}>
+            <a href="/kontakt" class="btn-primary button-row w-inline-block">
+              <div class="flex-horizontal">
+                <div>Kontaktieren</div>
+                <div class="arrow-icon">&#xE900;</div>
+              </div>
+            </a>
+            {showPhone && (
+              <a href="tel:+4962061857728" class="cta-telefonnummer w-inline-block">
+                <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/682f0a2854d6f9fb2051432f_phone-call.png" loading="lazy" alt="" class="image-3 invert" />
+                <p class="cta-telefonnummer white">+49 6209 298 16 78</p>
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+    <img class="floating-item cta-v1" src="/cdn/67eacdeb6f6d737ef0fa7cd2/67eacdeb6f6d737ef0fa7d79_cta-line-decorative-startuply-x-webflow-template.png" alt="" />
+  </section>
+</div>

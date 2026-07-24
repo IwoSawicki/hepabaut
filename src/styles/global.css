@@ -1,24 +1,42 @@
-@import "tailwindcss";
-
 /*
-  Design-Tokens — PLATZHALTER.
-  TODO(1:1): exakte Werte aus mirror-CSS (cdn.prod.website-files.com/.../hepabaut.webflow.shared.*.css)
-  übernehmen, sobald die CSS-/Font-Assets im Repo sind. Aktuell neutrale Näherung, damit das
-  Grundgerüst navigierbar baut — KEINE final abgestimmten Marken-Farben/Fonts.
+  Styling-Architektur (1:1-Nachbau):
+  - webflow.css  = aus dem Original-CSS extrahierte, auf benutzte Klassen gepurgte Regeln
+                   (inkl. Normalize, @font-face Onest, :root-Farbtokens, alle Media-Queries).
+                   Das garantiert pixelgenaues 1:1 — Werte hier NIE per Hand "nachbessern",
+                   sondern bei Bedarf neu aus mirror-v3 extrahieren.
+  - Tailwind     = nur theme + utilities (KEIN preflight — Normalize kommt schon aus webflow.css).
+                   Utilities liegen in einer späteren Layer und können Webflow-Werte gezielt
+                   überschreiben; primär gedacht für NEUE Komponenten/Landingpages.
 */
-@theme {
-  --color-brand: #1a1a1a;        /* TODO: echte Primärfarbe */
-  --color-brand-accent: #d4a017; /* TODO: echte Akzentfarbe */
-  --color-ink: #1a1a1a;
-  --color-muted: #55585f;
-  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  /* TODO: self-hosted Webflow-Font via @font-face einbinden und hier setzen */
-}
+/*
+  WICHTIG: prefix(tw) — Webflow nutzt Klassennamen, die mit Tailwind-Utilities kollidieren
+  (z. B. .gap-20: Webflow=30px Grid-Gap, Tailwind=5rem). Ohne Präfix überschreibt die
+  Utilities-Layer die Original-Optik. Neue Tailwind-Klassen daher als tw:flex, tw:gap-4 usw.
+*/
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme) prefix(tw);
+@import 'tailwindcss/utilities.css' layer(utilities) prefix(tw);
+@import './webflow.css' layer(base);
 
-html {
-  scroll-behavior: smooth;
-}
-body {
-  font-family: var(--font-sans);
-  color: var(--color-ink);
+/* Marken-Tokens für neue Tailwind-Komponenten — Werte identisch mit :root aus webflow.css */
+@theme {
+  --color-primary: #06c35d; /* --accent--primary-1 */
+  --color-secondary-1: #063137; /* --secondary--color-1 (Dunkelteal) */
+  --color-secondary-2: #f7ece1; /* --secondary--color-2 (Creme) */
+  --color-neutral-100: #ffffff;
+  --color-neutral-200: #fbf8f5;
+  --color-neutral-300: #f2f2f2;
+  --color-neutral-400: #dddddd;
+  --color-neutral-500: #b9b9b9;
+  --color-neutral-600: #6b6b6b;
+  --color-neutral-700: #353535;
+  --color-neutral-800: #131313;
+  --font-sans: 'Onest', sans-serif;
+
+  /* Breakpoints wie Original-Webflow (Desktop-first Media-Queries im webflow.css) */
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1440px;
+  --breakpoint-2xl: 1920px;
 }

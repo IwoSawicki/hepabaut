@@ -1,15 +1,14 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Faq from '../components/Faq.astro';
-import { usps, site } from '../data/site';
+import ServiceTiles from '../components/ServiceTiles.astro';
+import UspGrid from '../components/UspGrid.astro';
+import Projekte from '../components/Projekte.astro';
+import VorherNachher from '../components/VorherNachher.astro';
+import CtaBand from '../components/CtaBand.astro';
+import FaqAccordion from '../components/FaqAccordion.astro';
+import { site } from '../data/site';
 
-const services = [
-  { name: 'Sanierung', href: '/sanierung' },
-  { name: 'Renovierung', href: '/renovierung' },
-  { name: 'Wasserschäden', href: '/wasserschaden' },
-];
-
-// FAQ 1:1 aus mirror (Startseite).
+// FAQ 1:1 aus mirror-v3 (Startseite).
 const faq = [
   { q: 'Was kostet eine Sanierung oder Renovierung?', a: 'Die Kosten variieren je nach Zustand und Größe der Immobilie sowie nach gewünschter Leistung. Nach einem kostenlosen Vor-Ort-Termin erstellen wir ein individuelles, transparentes Angebot – ohne versteckte Kosten oder böse Überraschungen.' },
   { q: 'Was unterscheidet HEPA BAUT von anderen Handwerksfirmen?', a: 'Wir beraten Sie offen und transparent und sagen Ihnen klar, was aus unserer Sicht die beste Lösung ist. Ihre Wünsche stehen dabei immer im Mittelpunkt – auch dann, wenn Sie sich für eine andere Umsetzung entscheiden' },
@@ -50,67 +49,139 @@ const jsonLd = [
   description="Sanierung & Renovierung vom Profi im Raum Heidelberg, Mannheim & Bergstraße: von kleinen Reparaturen über Renovierung bis Komplettsanierung und schnelle Hilfe bei Wasserschäden."
   jsonLd={jsonLd}
 >
-  <!-- Hero -->
-  <section class="bg-neutral-50">
-    <div class="mx-auto max-w-6xl px-4 py-20">
-      <h1 class="max-w-3xl text-4xl font-bold leading-tight sm:text-6xl">Sanierung &amp; Renovierung vom Profi</h1>
-      <p class="mt-5 max-w-2xl text-lg text-[var(--color-muted)]">
-        Von kleinen Reparaturen, über Renovierung, bis hin zur Komplettsanierung, oder schnelle Hilfe bei Wasserschäden:
-        Wir koordinieren alle Gewerke und liefern termintreu.
-      </p>
-      <div class="mt-8 flex flex-wrap items-center gap-4">
-        <a href="/kontakt" class="rounded-full bg-[var(--color-brand)] px-6 py-3 font-semibold text-white">Kontaktformular</a>
-        <a href={`tel:${site.phonePrimaryHref}`} class="font-semibold text-[var(--color-brand-accent)]">{site.phonePrimary}</a>
+  <!-- Hero (hero-v1, Hintergrundbild + Verlauf via CSS) -->
+  <div class="mg-section mg-top-16px">
+    <section class="section hero-full hero-v1">
+      <div class="container-default w-container">
+        <div class="inner-container hero-start customwidth">
+          <div class="inner-container _500px---mbl customwidth">
+            <h1 class="display-1 color-neutral-100">Sanierung &amp;&nbsp;Renovierung <br />vom Profi</h1>
+            <div>
+              <p class="color-neutral-100 mg-bottom-32px">Von kleinen Reparaturen, über&nbsp;Renovierung, bis hin zur Komplettsanierung, oder schnelle Hilfe bei Wasserschäden: Wir koordinieren alle Gewerke und liefern termintreu.</p>
+            </div>
+            <div class="buttons-row">
+              <a href="/kontakt" class="btn-primary button-row w-inline-block">
+                <div class="flex-horizontal">
+                  <div>Kontaktformular</div>
+                  <div class="arrow-icon">&#xE900;</div>
+                </div>
+              </a>
+              <a href="/kontakt" class="btn-secondary white green-custom hidden w-inline-block">
+                <div class="flex-horizontal padding-custom">
+                  <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/682f0a2854d6f9fb2051432f_phone-call.png" loading="lazy" alt="Schwarzes Telefonicon - Hepa Baut" class="image-4" />
+                  <div class="text-block-4">06209 298 1678</div>
+                </div>
+              </a>
+              <a href="#" class="cta-telefonnummer w-inline-block">
+                <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/682f0a2854d6f9fb2051432f_phone-call.png" loading="lazy" alt="" class="image-3 invert" />
+                <p class="cta-telefonnummer white">+49 6209 298 16 78</p>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="logo-wrapper">
+          <div class="w-layout-grid grid-6-columns logo-strip">
+            <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/67eacdeb6f6d737ef0fa7d50_logo-google-startuply-x-webflow-template.svg" alt="Google Logo - Startply X Webflow Template" class="image google-logo" />
+            <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/67eacdeb6f6d737ef0fa7d52_logo-facebook-startuply-x-webflow-template.svg" alt="Facebook Logo - Startply X Webflow Template" />
+            <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/67eacdeb6f6d737ef0fa7d51_logo-youtube-startuply-x-webflow-template.svg" alt="YouTube Logo - Startply X Webflow Template" />
+            <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/67eacdeb6f6d737ef0fa7d58_logo-pinterest-startuply-x-webflow-template.svg" alt="Pinterest Logo - Startply X Webflow Template" />
+            <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/67eacdeb6f6d737ef0fa7d55_logo-twitch-startuply-x-webflow-template.svg" alt="Twitch Logo - Startply X Webflow Template" class="image twitch-logo" />
+            <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/67eacdeb6f6d737ef0fa7d4f_logo-webflow-startuply-x-webflow-template.svg" alt="Webflow Logo - Startply X Webflow Template" />
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 
-  <!-- Leistungen -->
-  <section class="mx-auto max-w-6xl px-4 py-16">
-    <h2 class="text-2xl font-bold sm:text-3xl">„Hepa Baut: Sauber, Zuverlässig und on-time"</h2>
-    <p class="mt-3 max-w-2xl text-[var(--color-muted)]">
-      Ganz egal was bei Ihnen auf der Baustelle ansteht. Hepa Baut ist Ihr zuverlässiger Partner.
-    </p>
-    <div class="mt-8 grid gap-6 sm:grid-cols-3">
-      {services.map((s) => (
-        <a href={s.href} class="rounded-xl border border-black/10 p-8 transition hover:border-[var(--color-brand-accent)]">
-          <h3 class="text-xl font-semibold">{s.name}</h3>
-          <span class="mt-4 inline-block font-semibold text-[var(--color-brand-accent)]">Mehr erfahren →</span>
-        </a>
-      ))}
-    </div>
-  </section>
+  <!-- Leistungs-Kacheln -->
+  <ServiceTiles
+    heading="Hepa Baut: Sauber, Zuverlässig und on-time"
+    intro="Ganz egal was bei Ihnen auf der Baustelle ansteht. Hepa Baut ist Ihr zuverlässiger Partner"
+  />
 
   <!-- Warum HepaBaut -->
-  <section class="bg-neutral-50">
-    <div class="mx-auto max-w-6xl px-4 py-16">
-      <h2 class="mb-8 text-2xl font-bold sm:text-3xl">Warum HepaBaut</h2>
-      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {usps.map((u, i) => (
-          <div>
-            <div class="mb-2 text-sm font-bold text-[var(--color-brand-accent)]">{String(i + 1).padStart(2, '0')}</div>
-            <h3 class="font-semibold">{u.title}</h3>
-            <p class="mt-2 text-sm text-[var(--color-muted)]">{u.text}</p>
+  <UspGrid heading="Warum HepaBaut" ctaLabel="Unverbindlich Beraten" />
+
+  <!-- Projekte -->
+  <Projekte />
+
+  <!-- Vorher / Nachher -->
+  <VorherNachher />
+
+  <!-- Im Original versteckte Sections (hidden) — für DOM-/Text-Parität mitgeführt -->
+  <div class="mg-section-3 mg-top-16px mg-bottom-111px hidden">
+    <section class="section-3 hero v2">
+      <div class="w-layout-blockcontainer container-default-7 w-container">
+        <div class="inner-container _1016px custom">
+          <div class="inner-container _500px---mbl">
+            <h2 class="display-15 color-neutral-803"><span>Es wird Zeit auch Ihr Zuhause zu Transformieren!</span></h2>
+            <div class="inner-container _558px">
+              <div class="buttons-row">
+                <a href="/kontakt" class="btn-primary-6 w-inline-block">
+                  <div class="flex-horizontal-2">
+                    <div>Kontaktformular</div>
+                    <div class="arrow-icon">&#xE900;</div>
+                  </div>
+                </a>
+              </div>
+            </div>
           </div>
-        ))}
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
+  <div class="mg-section hidden">
+    <section class="section position-relative">
+      <div class="container-default w-container">
+        <div class="inner-container _600px---tablet center">
+          <div class="inner-container _500px---mbl center">
+            <div class="inner-container _550px center">
+              <div class="text-center mg-bottom-32px">
+                <div class="accent-line center"></div>
+                <h2 class="display-2 color-neutral-100">Hepa Solar in Zahlen</h2>
+              </div>
+            </div>
+            <div class="w-layout-grid grid-3-columns stats-v2-grid">
+              <div class="stats-v2">
+                <div>
+                  <div class="heading-h1-size color-neutral-100 mg-bottom-16px">40<span class="color-accent-1">+</span></div>
+                  <h3 class="display-4 color-neutral-100 mg-bottom-16px">Zufriedene Kunden</h3>
+                </div>
+                <div class="divider _0px---32px bg-neutral-500"></div>
+              </div>
+              <div class="stats-v2">
+                <div>
+                  <div class="heading-h1-size color-neutral-100 mg-bottom-16px">3<span class="color-accent-1">+</span></div>
+                  <h3 class="display-4 color-neutral-100 mg-bottom-16px">Jahre auf dem Markt</h3>
+                </div>
+                <div class="divider _0px---32px bg-neutral-500"></div>
+              </div>
+              <div class="stats-v2">
+                <div>
+                  <div class="heading-h1-size color-neutral-100 mg-bottom-16px">500<span class="color-accent-1">qm</span></div>
+                  <h3 class="display-4 color-neutral-100 mg-bottom-16px">Photovoltaik verlegt</h3>
+                </div>
+                <div class="divider _0px---32px bg-neutral-500"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-color-section _100"></div>
+    </section>
+  </div>
 
-  <!-- Testimonial -->
-  <section class="mx-auto max-w-3xl px-4 py-16 text-center">
-    <blockquote class="text-2xl font-semibold">„Vom Rohbau bis zum letzten Pinselstrich – alles perfekt"</blockquote>
-    <p class="mt-4 text-[var(--color-muted)]">– Fam. Schneider, Weinheim</p>
-  </section>
+  <!-- Testimonial-CTA -->
+  <CtaBand
+    heading={'"Vom Rohbau bis zum letzten Pinselstrich - alles perfekt"'}
+    subline="-Fam. Schneider, Weinheim"
+  />
 
-  <Faq heading="Oft gestellte Fragen" items={faq} />
+  <!-- Kontakt-CTA -->
+  <div class="div-block-2">
+    <CtaBand heading="Kontaktieren Sie uns noch heute und erhalten Sie ein unverbindliches Angebot." showPhone={false} />
+  </div>
 
-  <!-- CTA -->
-  <section class="mx-auto max-w-6xl px-4 py-16 text-center">
-    <h2 class="text-2xl font-bold sm:text-3xl">Kontaktieren Sie uns noch heute und erhalten Sie ein unverbindliches Angebot.</h2>
-    <div class="mt-6 flex flex-wrap justify-center gap-4">
-      <a href="/kontakt" class="rounded-full bg-[var(--color-brand)] px-6 py-3 font-semibold text-white">Kontaktieren</a>
-      <a href={`tel:${site.phonePrimaryHref}`} class="font-semibold text-[var(--color-brand-accent)]">{site.phonePrimary}</a>
-    </div>
-  </section>
+  <!-- FAQ -->
+  <FaqAccordion heading="Oft gestellte Fragen" items={faq} />
 </BaseLayout>

@@ -1,39 +1,106 @@
 ---
-import { nav, site } from '../data/site';
+// Footer 1:1 aus mirror-v3: CTA-Band („Holen Sie sich…") + footer-wrapper.
+// Inhalte bewusst identisch zum Original (inkl. hepasolar.de-Mail & Footer-Nummer — siehe CLAUDE.md).
 ---
-<footer class="mt-16 border-t border-black/10 bg-neutral-50">
-  <div class="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:grid-cols-2 md:grid-cols-4">
-    <div>
-      <p class="mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--color-muted)]">Navigation</p>
-      <ul class="space-y-2 text-sm">
-        {nav.map((item) => (
-          <li><a href={item.href} class="hover:underline">{item.label}</a></li>
-        ))}
-      </ul>
+<footer>
+  <div class="cta---footer-wrapper">
+    <div class="footer-cta">
+      <div class="container-default z-index-1 w-container">
+        <div>
+          <div class="w-layout-grid grid-2-columns title-and-btn">
+            <h2 class="display-2 color-neutral-100 mg-bottom-0">Holen Sie sich jetzt ein unverbindliches Angebot ein<span class="text-no-wrap"></span></h2>
+            <div class="buttons-row">
+              <a href="/kontakt" class="btn-primary button-row w-inline-block">
+                <div class="flex-horizontal">
+                  <div>Kontaktieren</div>
+                  <div class="arrow-icon">&#xE900;</div>
+                </div>
+              </a>
+              <a href="/kontakt" class="btn-secondary white green-custom hidden w-inline-block">
+                <div class="flex-horizontal padding-custom">
+                  <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/682f0a2854d6f9fb2051432f_phone-call.png" loading="lazy" alt="" class="image-4" />
+                  <div class="text-block-4">06209 298 1678</div>
+                </div>
+              </a>
+              <a href="tel:+4962061857728" class="cta-telefonnummer w-inline-block">
+                <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/682f0a2854d6f9fb2051432f_phone-call.png" loading="lazy" alt="" class="image-3 invert" />
+                <p class="cta-telefonnummer white no-underline">+49 6209 298 16 78</p>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/67eacdeb6f6d737ef0fa7d8f_cta-v2-line-decorative-startuply-x-webflow-template.png" alt="" class="floating-item cta-v1-bg" />
     </div>
-    <div>
-      <p class="mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--color-muted)]">Kontaktdaten</p>
-      <ul class="space-y-2 text-sm">
-        <li><a href={`tel:${site.phoneFooterHref}`} class="hover:underline">{site.phoneFooter}</a></li>
-        <li><a href={`mailto:${site.emailFooter}`} class="hover:underline">{site.emailFooter}</a></li>
-      </ul>
+    <div class="mg-section">
+      <footer class="footer-wrapper">
+        <div class="container-default w-container">
+          <div class="footer-top">
+            <div class="w-layout-grid grid-footer-v1">
+              <div>
+                <a href="/" class="footer-logo-wrapper w-inline-block">
+                  <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/682f08cbafd4c6f4363d9656_Logo-HepaBaut-455x213.png" alt="HePa Baut Logo" class="footer-logo" />
+                </a>
+              </div>
+              <div id="w-node-_535f5a16-6ec9-45ed-bb3e-3c82f743a30d-91dd5701" class="w-layout-grid grid-footer-v1---menu">
+                <div class="menu-title-and-links-wrapper">
+                  <div class="menu-title">Navigation</div>
+                  <div class="menu-wrapper">
+                    <ul role="list" class="footer-list-wrapper w-list-unstyled">
+                      <li class="footer-list-item"><a href="/" class="footer-link">Home</a></li>
+                      <li class="footer-list-item"><a href="/sanierung" class="footer-link">Sanierung</a></li>
+                      <li class="footer-list-item"><a href="/renovierung" class="footer-link">Renovierung</a></li>
+                      <li class="footer-list-item"><a href="/wasserschaden" class="footer-link">Wasserschäden</a></li>
+                      <li class="footer-list-item"><a href="/kontakt" class="footer-link">Kontakt</a></li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="menu-title-and-links-wrapper">
+                  <div class="menu-title">Kontaktdaten</div>
+                  <div class="menu-wrapper">
+                    <ul role="list" class="footer-list-wrapper w-list-unstyled">
+                      <li class="footer-list-item"><a href="tel:+4962061857728" class="footer-link">06206 185 7728</a></li>
+                      <li class="footer-list-item"><a href="mailto:info@hepasolar.de" class="footer-link">info@hepasolar.de</a></li>
+                    </ul>
+                  </div>
+                  <div class="menu-title mg-top-48px">Adresse</div>
+                  <ul role="list" class="footer-list-wrapper w-list-unstyled">
+                    <li class="footer-list-item">
+                      <a href="https://maps.app.goo.gl/Xmf7Tn9WMJsogfTW6" class="footer-link">Steinlachstraße 66, 68642 Bürstadt</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="menu-title-and-links-wrapper">
+                  <div class="menu-title">Rechtliches</div>
+                  <div class="menu-wrapper">
+                    <ul role="list" class="footer-list-wrapper w-list-unstyled">
+                      <li class="footer-list-item"><a href="/impressum" class="footer-link">Impressum</a></li>
+                      <li class="footer-list-item"><a href="/datenschutz" class="footer-link">Datenschutz</a></li>
+                      <li class="footer-list-item"><p class="footer-text">‍</p></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="footer-bottom">
+            <div class="w-layout-grid grid-2-columns paragraph-and-icon-social">
+              <p class="mg-bottom-0 color-neutral-100">Hermann und Adam Solar Gbr © 2025 | Designed by <a href="https://www.sawix.de/?ref=hepasolar" target="_blank" rel="noopener" class="link-text color-neutral-100 text-decoration-none text-underline">Sawix Studio</a></p>
+              <div id="w-node-bafa3bb0-3087-6d8e-cb98-c3f93d538255-91dd5701" class="w-layout-grid grid-social-media right center---tablet">
+                <a href="https://facebook.com/" target="_blank" rel="noopener" class="link-text color-neutral-100 text-decoration-none hidden w-inline-block" aria-label="Facebook">
+                  <div class="social-icon-font _20px">&#xE810;</div>
+                </a>
+                <a href="https://www.instagram.com/hepasolargbr/" target="_blank" rel="noopener" class="link-text color-neutral-100 text-decoration-none w-inline-block" aria-label="Instagram">
+                  <div class="social-icon-font _20px">&#xE807;</div>
+                </a>
+                <a href="https://www.linkedin.com/" target="_blank" rel="noopener" class="link-text color-neutral-100 text-decoration-none hidden w-inline-block" aria-label="LinkedIn">
+                  <div class="social-icon-font _20px">&#xE819;</div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
-    <div>
-      <p class="mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--color-muted)]">Adresse</p>
-      <address class="space-y-1 text-sm not-italic">
-        <div>{site.addressStreet}</div>
-        <div>{site.addressCity}</div>
-      </address>
-    </div>
-    <div>
-      <p class="mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--color-muted)]">Rechtliches</p>
-      <ul class="space-y-2 text-sm">
-        <li><a href="/impressum" class="hover:underline">Impressum</a></li>
-        <li><a href="/datenschutz" class="hover:underline">Datenschutz</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="border-t border-black/10 py-4 text-center text-xs text-[var(--color-muted)]">
-    {site.legalName} © {site.year} | Designed by {site.designedBy}
   </div>
 </footer>

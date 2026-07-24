@@ -1,0 +1,58 @@
+---
+// „Warum HepaBaut"-Section (article#vorteile) — 2×2-Grid mit Nummern 01–04.
+// Wiederverwendbar: Überschrift, USPs und CTA-Label parametrisierbar (Start-, Übersichts-, Ortsseiten).
+import { usps as defaultUsps } from '../data/site';
+
+interface Usp {
+  title: string;
+  text: string;
+}
+interface Props {
+  heading: string;
+  usps?: readonly Usp[];
+  ctaLabel?: string;
+  sectionId?: string;
+}
+const { heading, usps = defaultUsps, ctaLabel = 'Unverbindlich Beraten', sectionId = 'vorteile' } = Astro.props;
+---
+<div>
+  <article id={sectionId} class="section pd-120px">
+    <div class="w-layout-blockcontainer container-default-2 w-container">
+      <div class="mg-bottom-64px">
+        <div class="inner-container _877px center">
+          <div class="inner-container _700px---tablet center">
+            <div class="inner-container _600px---mbl center">
+              <div class="text-center-2">
+                <div class="accent-line-2 center"></div>
+                <h2 class="display-5"><span>{heading}</span></h2>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="w-layout-grid grid-2-columns gap-32px">
+        {usps.map((u, i) => (
+          // Original-Webflow-Node-IDs: rechte Spalte (Items 02/04) bekommt via #w-node-CSS
+          // justify-self:end (+ Responsive-Resets). IDs 1:1 aus mirror-v3 übernommen.
+          <div
+            id={i === 1 ? 'w-node-c4fd44da-1ffe-0352-b5d9-f3e43ebd8839-f0fa7cd8' : i === 3 ? 'w-node-c4fd44da-1ffe-0352-b5d9-f3e43ebd8849-f0fa7cd8' : undefined}
+            class="value-wrapper"
+          >
+            <div class="display-6 mg-right-34px value-number">{String(i + 1).padStart(2, '0')}</div>
+            <div class="value-content">
+              <h3 class="heading-h2-size-2 mg-bottom-16px">{u.title}</h3>
+              <p class="mg-bottom-0">{u.text}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div class="flex-horizontal gap-20 mg-top-32px">
+        <a href="/kontakt" target="_blank" class="btn-primary-4 w-button">{ctaLabel}</a>
+        <a href="tel:+4962061857728" class="cta-telefonnummer w-inline-block">
+          <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/682f0a2854d6f9fb2051432f_phone-call.png" loading="lazy" alt="" class="image-3" />
+          <p class="cta-telefonnummer black">+49 6209 298 16 78</p>
+        </a>
+      </div>
+    </div>
+  </article>
+</div>

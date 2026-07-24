@@ -1,31 +1,83 @@
 ---
-import { nav, site } from '../data/site';
-const { pathname } = Astro.url;
-const isActive = (href: string) =>
-  href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(href + '/');
+// Header 1:1 aus mirror-v3 (header-top + header-wrapper w-nav).
+// Mobile-Menü: Original nutzt webflow.js — hier CSS-only Checkbox-Toggle (kein Client-JS).
+// data-collapse="medium" → Menü klappt ab ≤991px hinter den Hamburger (Webflow-Standard).
 ---
-<header class="border-b border-black/10 bg-white">
-  <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-    <a href="/" class="text-lg font-bold tracking-tight">{site.name}</a>
-    <nav aria-label="Hauptnavigation" class="hidden items-center gap-6 md:flex">
-      {nav.map((item) => (
-        <a
-          href={item.href}
-          aria-current={isActive(item.href) ? 'page' : undefined}
-          class:list={[
-            'text-sm hover:text-[var(--color-brand-accent)]',
-            isActive(item.href) && 'font-semibold text-[var(--color-brand-accent)]',
-          ]}
-        >
-          {item.label}
-        </a>
-      ))}
-    </nav>
-    <a
-      href={`tel:${site.phonePrimaryHref}`}
-      class="rounded-full bg-[var(--color-brand)] px-4 py-2 text-sm font-semibold text-white"
-    >
-      Rückruf vereinbaren
-    </a>
+<div class="position-relative">
+  <div class="position-absolute header-top">
+    <div data-collapse="medium" role="banner" class="header-wrapper w-nav">
+      <div class="container-default w-container">
+        <div class="header-content-wrapper">
+          <div class="header-left-side">
+            <a href="/" class="header-logo-link w-nav-brand">
+              <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/682f08cbafd4c6f4363d9656_Logo-HepaBaut-455x213.png" alt="HePa Baut Logo" class="header-logo" />
+            </a>
+          </div>
+          <div class="header-center">
+            <nav role="navigation" class="header-nav-menu-wrapper w-nav-menu" id="nav-menu">
+              <ul role="list" class="header-nav-menu-list w-list-unstyled">
+                <li class="header-nav-list-item middle">
+                  <a href="/" class="header-nav-link white---black-tablet white w-nav-link">Home</a>
+                </li>
+                <li class="header-nav-list-item middle">
+                  <a href="/sanierung" class="header-nav-link white---black-tablet white w-nav-link">Sanierung</a>
+                </li>
+                <li class="header-nav-list-item middle">
+                  <a href="/renovierung" class="header-nav-link white---black-tablet white w-nav-link">Renovierung</a>
+                </li>
+                <li class="header-nav-list-item middle">
+                  <a href="/wasserschaden" class="header-nav-link white---black-tablet white w-nav-link">Wasserschäden</a>
+                </li>
+                <li class="header-nav-list-item show-in-tablet header-btn">
+                  <a href="/kontakt" class="btn-primary small width-100 w-button">Kontakt</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+          <div class="header-right-side">
+            <a href="/kontakt" class="header-nav-link white---black-tablet white hidden w-nav-link">Rückruf vereinbaren</a>
+            <a href="/kontakt" class="btn-primary small header-btn-hidde-on-mb w-button">Angebot einholen</a>
+            <label for="nav-toggle" class="hamburger-menu-btn w-nav-button" aria-label="Menü öffnen">
+              <div class="hamburger-menu-wrapper">
+                <div class="hamburger-menu-bar top"></div>
+                <div class="hamburger-menu-bar bottom"></div>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+      <input type="checkbox" id="nav-toggle" class="nav-toggle-checkbox" aria-hidden="true" />
+    </div>
   </div>
-</header>
+</div>
+
+<style is:global>
+  /* CSS-only Mobile-Menü (ersetzt webflow.js-Toggle) — nur ≤991px aktiv */
+  .nav-toggle-checkbox {
+    display: none;
+  }
+  @media screen and (max-width: 991px) {
+    .header-wrapper {
+      position: relative;
+    }
+    /* Menü als Dropdown unter dem Header, wie Webflows nav-menu-open */
+    .header-wrapper:has(.nav-toggle-checkbox:checked) .w-nav-menu {
+      display: block;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      z-index: 100;
+    }
+    /* Hamburger → X Animation wie Webflow w--open */
+    .header-wrapper:has(.nav-toggle-checkbox:checked) .hamburger-menu-bar.top {
+      transform: translateY(4.5px) rotate(45deg);
+    }
+    .header-wrapper:has(.nav-toggle-checkbox:checked) .hamburger-menu-bar.bottom {
+      transform: translateY(-4.5px) rotate(-45deg);
+    }
+    .hamburger-menu-bar {
+      transition: transform 0.3s;
+    }
+  }
+</style>

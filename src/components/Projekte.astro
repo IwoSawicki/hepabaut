@@ -1,0 +1,40 @@
+---
+// Projekte-Galerie (Startseite): Lightbox-Grid aus mirror-v3.
+// Original nutzt Webflow-Lightbox (JS) — Phase 1 ohne JS: Bild öffnet in neuem Tab.
+// TODO(Phase 2): Lightbox-Verhalten ggf. mit kleiner JS-Insel oder :target-CSS nachrüsten.
+import { projekte } from '../data/startseite';
+
+interface Props {
+  heading?: string;
+}
+const { heading = 'Projekte' } = Astro.props;
+---
+<div class="mg-section">
+  <section class="section pd-230px pd-top-104px custom">
+    <div class="w-layout-blockcontainer container-default w-container">
+      <div class="inner-container _500px---mbl">
+        <div class="z-index-1">
+          <div class="mg-bottom-64px">
+            <div class="inner-container _513px _100-mbl">
+              <div class="inner-container _450px---tablet _100-mbl">
+                <div class="accent-line"></div>
+                <h2 class="display-2 mg-bottom-0">{heading}</h2>
+              </div>
+            </div>
+          </div>
+          <div class="w-dyn-list">
+            <div role="list" class="collection-list w-dyn-items">
+              {projekte.map((bild) => (
+                <div role="listitem" class="w-dyn-item">
+                  <a href={encodeURI(bild)} target="_blank" rel="noopener" class="projekte-lightbox w-inline-block">
+                    <img src={encodeURI(bild)} loading="lazy" alt="" class="projekte-lightbox-bild" />
+                  </a>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
