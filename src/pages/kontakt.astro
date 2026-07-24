@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Faq from '../components/FaqAccordion.astro';
-import { site } from '../data/site';
+import FaqAccordion from '../components/FaqAccordion.astro';
 
 const faq = [
   { q: 'Was kostet eine Sanierung oder Renovierung?', a: 'Die Kosten variieren je nach Zustand und Größe der Immobilie sowie nach gewünschter Leistung. Nach einem kostenlosen Vor-Ort-Termin erstellen wir ein individuelles, transparentes Angebot – ohne versteckte Kosten oder böse Überraschungen.' },
@@ -13,49 +12,72 @@ const faq = [
 ];
 ---
 <BaseLayout
-  title="Kontakt - Hepa Baut"
+  title="Kontakt - Hepa Solar"
   description="Kontaktieren Sie HePa Baut per Formular, Telefon oder E-Mail. Vor-Ort-Termine nach Vereinbarung in Bürstadt und Umgebung."
 >
-  <section class="mx-auto max-w-6xl px-4 py-16">
-    <h1 class="text-3xl font-bold sm:text-5xl">Kontaktieren Sie uns</h1>
-    <p class="mt-4 max-w-2xl text-[var(--color-muted)]">
-      Nutzen Sie das Kontaktformular oder kontaktieren Sie uns per Telefon oder E-Mail.
-    </p>
-
-    <div class="mt-10 grid gap-12 md:grid-cols-2">
-      <div>
-        <h2 class="text-xl font-semibold">Unsere Kontaktdaten</h2>
-        <ul class="mt-4 space-y-2">
-          <li><a href={`tel:${site.phoneFooterHref}`} class="hover:underline">{site.phoneFooter}</a></li>
-          <li><a href={`mailto:${site.emailKontakt}`} class="hover:underline">{site.emailKontakt}</a></li>
-        </ul>
-        <h2 class="mt-8 text-xl font-semibold">Vorbeikommen mit Terminvereinbarung</h2>
-        <address class="mt-4 not-italic text-[var(--color-muted)]">
-          {site.addressStreet}<br />{site.addressCity}
-        </address>
+  <!-- Hero v6: Kontaktinfos + Formular -->
+  <section class="section hero v6">
+    <div class="w-layout-blockcontainer container-default w-container">
+      <div class="w-layout-grid grid-2-columns contact-grid">
+        <div id="w-node-c6aa71e4-f43b-9de9-54b9-2963c6495ba1-f0fa7d27" class="inner-container _445px _100-tablet">
+          <div class="inner-container _450px---tablet">
+            <div>
+              <h1 class="display-1 mg-bottom-8px">Kontaktieren Sie uns</h1>
+              <p class="mg-bottom-50px">Nutzen Sie das Kontaktformular oder kontaktieren Sie uns per Telefon oder E-Mail.</p>
+            </div>
+          </div>
+          <div class="inner-container _398px _100-tablet">
+            <div class="w-layout-grid grid-1-column contact-layout">
+              <div>
+                <h2 class="heading-h4-size mg-bottom-8px">Unsere Kontaktdaten<span class="text-no-wrap"></span></h2>
+                <ul role="list" class="footer-list-wrapper kontaktseite w-list-unstyled">
+                  <li class="footer-list-item kontaktseite"><a href="tel:+4962061857728" class="footer-link kontaktseite">06206 185 7728</a></li>
+                  <li class="footer-list-item kontaktseite"><a href="mailto:info@hepabaut.de" class="footer-link kontaktseite">info@hepabaut.de</a></li>
+                </ul>
+              </div>
+              <div class="divider contact-layout-divider"></div>
+              <div>
+                <h2 class="heading-h4-size mg-bottom-8px">Vorbeikommen mit Terminvereinbarung</h2>
+                <p class="mg-bottom-0">Steinlachstraße 66<br />68642 Bürstadt</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- TODO(Phase 4): Formular-Endpoint + Spam-Schutz + Consent anbinden -->
+        <div id="w-node-e8c3b984-cd7a-a694-a808-ec14a2718881-f0fa7d27" class="card contact-form">
+          <div class="contact-form-block w-form">
+            <form name="wf-form-Kontakt-Formular" method="get" class="contact-form-grid">
+              <div>
+                <label for="name">Name</label>
+                <input class="input small w-input" maxlength="256" name="name" placeholder="Ihr voller Name" type="text" id="name" required />
+              </div>
+              <div>
+                <label for="email">E-Mail-Adresse</label>
+                <input class="input small w-input" maxlength="256" name="email" placeholder="Mueller@gmail.com" type="email" id="email" required />
+              </div>
+              <div id="w-node-_820eea29-8703-1666-b65a-396655101beb-f0fa7d27" class="text-area-wrapper">
+                <label for="message">Nachricht</label>
+                <textarea id="message" name="Message" maxlength="5000" placeholder="Liebes Hepa Baut Team, ..." class="text-area small mg-bottom-0 w-input"></textarea>
+              </div>
+              <div id="w-node-_4999515a-94e6-89a3-902f-e791788fc2d4-f0fa7d27" class="contact-form-bottom">
+                <div class="mg-right-19px mg-right-0px---mbp">
+                  <div class="btn-primary form-wrapper">
+                    <input type="submit" class="btn-primary form-btn w-button" value="Absenden" />
+                    <div class="arrow-icon">&#xE900;</div>
+                  </div>
+                </div>
+                <div class="w-layout-grid grid-social-media">
+                  <a href="https://www.instagram.com/hepasolargbr/" target="_blank" rel="noopener" class="link-text color-neutral-800 text-decoration-none w-inline-block" aria-label="Instagram">
+                    <div class="social-icon-font _20px">&#xE807;</div>
+                  </a>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
-
-      <!-- TODO(Phase 4): Formular-Endpoint (Serverless/Formspree) + Spam-Schutz + Consent anbinden. -->
-      <form class="space-y-4" method="post" action="#">
-        <div>
-          <label class="block text-sm font-medium" for="name">Name</label>
-          <input id="name" name="name" required class="mt-1 w-full rounded-lg border border-black/15 px-3 py-2" />
-        </div>
-        <div>
-          <label class="block text-sm font-medium" for="email">E-Mail-Adresse</label>
-          <input id="email" name="email" type="email" required class="mt-1 w-full rounded-lg border border-black/15 px-3 py-2" />
-        </div>
-        <div>
-          <label class="block text-sm font-medium" for="message">Nachricht</label>
-          <textarea id="message" name="message" rows="5" required class="mt-1 w-full rounded-lg border border-black/15 px-3 py-2"></textarea>
-        </div>
-        <button type="submit" class="rounded-full bg-[var(--color-brand)] px-6 py-3 font-semibold text-white">Senden</button>
-        <p class="text-xs text-[var(--color-muted)]">
-          Ihre Nachricht wurde übermittelt. Wir werden uns innerhalb von 48 Stunden bei Ihnen melden.
-        </p>
-      </form>
     </div>
   </section>
 
-  <Faq heading="Oft gestellte Fragen" items={faq} />
+  <FaqAccordion heading="Oft gestellte Fragen" items={faq} />
 </BaseLayout>

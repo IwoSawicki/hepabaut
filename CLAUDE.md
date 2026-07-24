@@ -199,8 +199,24 @@ npm run preview   # Build lokal prüfen
 - [x] **Startseite visuell 1:1** (Screenshot-Diff-verifiziert auf 5 Breakpoints): Header/Nav mit
       CSS-Mobile-Menü, Hero, Leistungs-Kacheln, USP-Grid, Projekte, Vorher/Nachher, CTA-Bänder,
       FAQ (details/summary), Footer. Wiederverwendbare Sections in `src/components/`.
-- [ ] Leistungs-Übersichten (`/sanierung`, `/renovierung`, `/wasserschaden`) visuell 1:1
-      (gleiches Vorgehen: Markup aus mirror-v3, Sections wiederverwenden).
-- [ ] Ortsseiten-Template (`LeistungPage.astro`) visuell 1:1 gegen die Beispiel-Ortsseiten.
-- [ ] Kontakt / Impressum / Datenschutz visuell 1:1.
+- [x] **Leistungs-Übersichten + alle 351 Ortsseiten visuell 1:1**: je ein Template pro Leistung
+      (`src/components/templates/{Sanierung,Renovierung,Wasserschaden}Template.astro`), das
+      Übersicht (ort=null) UND Ortsseiten (`[leistung]/[ort].astro`) speist. `{ort}`-Ersetzung
+      gegen mirror-Beispielseiten verifiziert. Wiederverwendbar: `LandingForm`, `UspGrid`
+      (CTA-Varianten), `FaqAccordionV2`, CSS-Slider-Carousel, Erste-Hilfe-Prozess.
+- [x] **Header 2 Varianten**: `overlay` (Startseite, weiße Nav über dunklem Hero) vs. `solid`
+      (Innenseiten, dunkle Nav im Fluss) — `BaseLayout` prop `headerVariant`.
+- [x] **Kontakt / Impressum visuell 1:1**. **Datenschutz bewusst gekürzt/angepasst** (Original
+      nennt Google Fonts/Analytics/Maps, die der Nachbau NICHT nutzt → vor Launch final
+      überarbeiten, siehe TODO in `datenschutz.astro`).
+- [x] **Deploy-Setup**: `Dockerfile` (multi-stage node→nginx) + `nginx.conf` (clean URLs,
+      Staging-`noindex`-Header — vor Prod-Launch entfernen!) + `404.astro`.
 - [ ] SEO-Härtung Phase 2 / Launch Phase 3 / Ads-Landingpages Phase 4 (siehe `plan.md`).
+
+### Offene Punkte vor echtem Launch (aus Phase 1)
+- Datenschutz final (self-hosted Fonts, kein Google-Tracking → Text anpassen; Consent nur falls
+  später Tracking dazukommt).
+- Ortsseiten-`<title>`/`<meta>` gegen Original prüfen (Original setzt sie teils per JS).
+- `nginx.conf`: `X-Robots-Tag noindex` entfernen, sobald auf der echten Domain live.
+- Widersprüche im Original (2 Telefonnummern, hepasolar.de vs. hepabaut.de, Bürstadt vs.
+  Mörlenbach) mit Kunde klären (aktuell 1:1 übernommen).
