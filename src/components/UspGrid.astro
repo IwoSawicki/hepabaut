@@ -1,22 +1,41 @@
 ---
-// „Warum HepaBaut"-Section (article#vorteile) — 2×2-Grid mit Nummern 01–04.
-// Wiederverwendbar: Überschrift, USPs und CTA-Label parametrisierbar (Start-, Übersichts-, Ortsseiten).
+// „Hepa Baut: Sauber, Zuverlässig und on-time" / „Warum HepaBaut" — USP-Artikel (2×2-Grid 01–04).
+// Auf jeder Seite fast identisch; Unterschiede als Props: Artikel-Klasse, CTA-Variante,
+// Original-Node-IDs (steuern justify-self:end der rechten Spalte via #w-node-CSS).
 import { usps as defaultUsps } from '../data/site';
 
 interface Usp {
   title: string;
   text: string;
 }
+type CtaVariant = 'primary4-phone' | 'buttons-row-phone' | 'buttons-row-only';
 interface Props {
   heading: string;
+  headingSpanClass?: string;
   usps?: readonly Usp[];
+  articleClass?: string;
+  ctaVariant?: CtaVariant;
   ctaLabel?: string;
-  sectionId?: string;
+  ctaBtnClass?: string;
+  /** tel:-Href der Telefonzeile (Original variiert zwischen den Seiten) */
+  telHref?: string;
+  /** Original-w-node-IDs für Item 2 und 4 (justify-self:end im Original-CSS) */
+  nodeIds?: [string, string];
 }
-const { heading, usps = defaultUsps, ctaLabel = 'Unverbindlich Beraten', sectionId = 'vorteile' } = Astro.props;
+const {
+  heading,
+  headingSpanClass,
+  usps = defaultUsps,
+  articleClass = 'section pd-120px',
+  ctaVariant = 'primary4-phone',
+  ctaLabel = 'Unverbindlich Beraten',
+  ctaBtnClass = 'btn-primary-2 w-inline-block',
+  telHref = 'tel:+4962061857728',
+  nodeIds = ['w-node-c4fd44da-1ffe-0352-b5d9-f3e43ebd8839-f0fa7cd8', 'w-node-c4fd44da-1ffe-0352-b5d9-f3e43ebd8849-f0fa7cd8'],
+} = Astro.props;
 ---
 <div>
-  <article id={sectionId} class="section pd-120px">
+  <article id="vorteile" class={articleClass}>
     <div class="w-layout-blockcontainer container-default-2 w-container">
       <div class="mg-bottom-64px">
         <div class="inner-container _877px center">
@@ -24,7 +43,7 @@ const { heading, usps = defaultUsps, ctaLabel = 'Unverbindlich Beraten', section
             <div class="inner-container _600px---mbl center">
               <div class="text-center-2">
                 <div class="accent-line-2 center"></div>
-                <h2 class="display-5"><span>{heading}</span></h2>
+                <h2 class="display-5"><span class={headingSpanClass}>{heading}</span></h2>
               </div>
             </div>
           </div>
@@ -32,12 +51,7 @@ const { heading, usps = defaultUsps, ctaLabel = 'Unverbindlich Beraten', section
       </div>
       <div class="w-layout-grid grid-2-columns gap-32px">
         {usps.map((u, i) => (
-          // Original-Webflow-Node-IDs: rechte Spalte (Items 02/04) bekommt via #w-node-CSS
-          // justify-self:end (+ Responsive-Resets). IDs 1:1 aus mirror-v3 übernommen.
-          <div
-            id={i === 1 ? 'w-node-c4fd44da-1ffe-0352-b5d9-f3e43ebd8839-f0fa7cd8' : i === 3 ? 'w-node-c4fd44da-1ffe-0352-b5d9-f3e43ebd8849-f0fa7cd8' : undefined}
-            class="value-wrapper"
-          >
+          <div id={i === 1 ? nodeIds[0] : i === 3 ? nodeIds[1] : undefined} class="value-wrapper">
             <div class="display-6 mg-right-34px value-number">{String(i + 1).padStart(2, '0')}</div>
             <div class="value-content">
               <h3 class="heading-h2-size-2 mg-bottom-16px">{u.title}</h3>
@@ -46,13 +60,43 @@ const { heading, usps = defaultUsps, ctaLabel = 'Unverbindlich Beraten', section
           </div>
         ))}
       </div>
-      <div class="flex-horizontal gap-20 mg-top-32px">
-        <a href="/kontakt" target="_blank" class="btn-primary-4 w-button">{ctaLabel}</a>
-        <a href="tel:+4962061857728" class="cta-telefonnummer w-inline-block">
-          <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/682f0a2854d6f9fb2051432f_phone-call.png" loading="lazy" alt="" class="image-3" />
-          <p class="cta-telefonnummer black">+49 6209 298 16 78</p>
-        </a>
-      </div>
+      {ctaVariant === 'primary4-phone' && (
+        <div class="flex-horizontal gap-20 mg-top-32px">
+          <a href="/kontakt" target="_blank" class="btn-primary-4 w-button">{ctaLabel}</a>
+          <a href={telHref} class="cta-telefonnummer w-inline-block">
+            <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/682f0a2854d6f9fb2051432f_phone-call.png" loading="lazy" alt="" class="image-3" />
+            <p class="cta-telefonnummer black">+49 6209 298 16 78</p>
+          </a>
+        </div>
+      )}
+      {ctaVariant === 'buttons-row-phone' && (
+        <div class="mg-top-32px">
+          <div class="buttons-row center">
+            <a href="/kontakt" class="btn-primary button-row w-inline-block">
+              <div class="flex-horizontal">
+                <div>{ctaLabel}</div>
+                <div class="arrow-icon">&#xE900;</div>
+              </div>
+            </a>
+            <a href={telHref} class="cta-telefonnummer w-inline-block">
+              <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/682f0a2854d6f9fb2051432f_phone-call.png" loading="lazy" alt="" class="image-3" />
+              <p class="cta-telefonnummer">+49 6209 298 16 78</p>
+            </a>
+          </div>
+        </div>
+      )}
+      {ctaVariant === 'buttons-row-only' && (
+        <div class="mg-top-32px">
+          <div class="buttons-row center">
+            <a href="/kontakt" class={ctaBtnClass}>
+              <div class="flex-horizontal">
+                <div>{ctaLabel}</div>
+                <div class="arrow-icon">&#xE900;</div>
+              </div>
+            </a>
+          </div>
+        </div>
+      )}
     </div>
   </article>
 </div>

@@ -1,0 +1,62 @@
+---
+// FAQ-Variante „v2" (Renovierung): Titel links, Akkordeon rechts, Plus-Icon aus zwei Linien.
+// CSS-only via details/summary (Original: webflow.js).
+import type { FaqItem } from '../data/leistungen';
+
+interface Props {
+  heading: string;
+  items: FaqItem[];
+}
+const { heading, items } = Astro.props;
+---
+{items.length > 0 && (
+  <div class="mg-section bg-neutral-300">
+    <div class="z-index-1">
+      <section class="section pd-0px">
+        <div class="container-default w-container">
+          <div class="w-layout-grid grid-2-columns faqs-grid">
+            <div class="inner-container faqs-grid-title">
+              <div class="line-sustitle"></div>
+              <h2 class="display-2 mg-bottom-0">{heading}</h2>
+            </div>
+            <div class="inner-container _636px _100-mbl">
+              <div class="w-layout-grid grid-1-column gap-row-0">
+                {items.map((item, i) => (
+                  <details class:list={['accordion-item-wrapper', 'v2', i === 0 && 'first', i === items.length - 1 && 'last', 'faq-details']}>
+                    <summary class="faq-summary">
+                      <div class="accordion-content-wrapper width-660px">
+                        <div class="accordion-header">
+                          <h3 class="accordion-title display-4">{item.q}</h3>
+                        </div>
+                      </div>
+                      <div class="accordion-side right-side">
+                        <div class="accordion-icon-wrapper">
+                          <div class="accordion-btn-line vertical"></div>
+                          <div class="accordion-btn-line"></div>
+                        </div>
+                      </div>
+                    </summary>
+                    <div class="acordion-body">
+                      <div class="accordion-spacer _16px"></div>
+                      <p class="mg-bottom-0">{item.a}</p>
+                    </div>
+                  </details>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+)}
+
+<style is:global>
+  /* Plus → Minus beim Öffnen (ersetzt webflow.js-Animation) */
+  details.faq-details .accordion-btn-line.vertical {
+    transition: transform 0.3s;
+  }
+  details.faq-details[open] .accordion-btn-line.vertical {
+    transform: rotate(90deg);
+  }
+</style>

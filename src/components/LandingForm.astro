@@ -1,0 +1,55 @@
+---
+// „card-4 landing-form" aus mirror-v3 — auf Übersichts- und Ortsseiten mehrfach genutzt.
+// Varianten: mit/ohne Titel („Rückruf vereinbaren"), mit/ohne E-Mail+Anfrage-Select.
+// TODO(Phase 4): action/Endpoint anbinden (Serverless) + Spam-Schutz; aktuell 1:1-Markup.
+interface Props {
+  /** Überschrift in der Karte (Original nutzt hier ein h2-ähnliches h1 — wir setzen h2, Optik identisch via Klasse) */
+  title?: string;
+  titleClass?: string;
+  withEmail?: boolean;
+  sectionClass?: string;
+}
+const { title, titleClass = 'display-8 white', withEmail = false, sectionClass = 'section-5 hero v25' } = Astro.props;
+---
+<section class={sectionClass}>
+  <div class="w-layout-blockcontainer container-default-7 w-container">
+    <slot name="above-form" />
+    <div id="form-hero" class="card-4 landing-form">
+      <div class="z-index-1">
+        <div class="inner-container _692px center">
+          <div class="demo-form-block w-form">
+            <form id="wf-form-Demo-Form" name="wf-form-Demo-Form" method="get" class="demo-form">
+              {title && <h2 class={titleClass}>{title}</h2>}
+              <input class="input-2 small w-input" maxlength="256" name="name" placeholder="Vor- und Nachname*" type="text" id="name" required />
+              <input class="input-2 small w-input" maxlength="256" name="telefon" placeholder="Telefonnummer*" type="tel" id="telefon" required />
+              {withEmail && (
+                <>
+                  <input class="input-2 w-input" maxlength="256" name="email" placeholder="E-Mail-Adresse*" type="text" id="email" required />
+                  <select id="field" name="field" class="form-select w-select">
+                    <option value="allgemein">Allgemeine Anfrage</option>
+                    <option value="angebot">Angebot-Anfrage</option>
+                  </select>
+                </>
+              )}
+              <textarea placeholder="Nachricht (optional)" maxlength="5000" id="nachricht" name="nachricht" class="text-area w-input"></textarea>
+              <div class="mg-top-8px">
+                <input type="submit" data-wait="Bitte warten..." class="btn-primary-6 w-button" value="Absenden" />
+              </div>
+            </form>
+            <div class="success-message-2 color-neutral-100 w-form-done">
+              <div>
+                <div class="line-rounded-icon-2 success-message-check large"></div>
+                <div class="heading-h3-size-2 mg-bottom-6px color-neutral-100">Thank you</div>
+                <div>Your message has <span>been submitted.</span><br />We will get back to you within <span>24-48 hours.</span></div>
+              </div>
+            </div>
+            <div class="error-message-2 w-form-fail">
+              <div>Oops! Something went wrong.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <img alt="" src="/cdn/67eacdeb6f6d737ef0fa7cd2/67eacdeb6f6d737ef0fa7ed2_line-demo-startply-x-webflow-template.svg" class="floating-item card-landing-demo-bg" />
+    </div>
+  </div>
+</section>
