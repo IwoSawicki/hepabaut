@@ -21,7 +21,7 @@ const { heading, items } = Astro.props;
       <div class="inner-container _990px center">
         <div class="w-layout-grid grid-1-column gap-row-32px">
           {items.map((item) => (
-            <details class="accordion-item-wrapper faq-details">
+            <details name="hepa-faq" class="accordion-item-wrapper faq-details">
               <summary class="faq-summary">
                 <div class="accordion-content-wrapper">
                   <div class="accordion-header">
@@ -64,9 +64,23 @@ const { heading, items } = Astro.props;
     display: none;
   }
   details.faq-details .line-icon-btn {
-    transition: transform 0.3s;
+    transition: transform 0.3s ease;
   }
   details.faq-details[open] .line-icon-btn {
     transform: rotate(135deg);
+  }
+  /* aktive Frage sanft hervorheben + Icon-Button einfärben */
+  details.faq-details {
+    transition: box-shadow 0.3s ease;
+  }
+  details.faq-details[open] {
+    box-shadow: 0 10px 30px rgba(6, 49, 55, 0.1);
+  }
+  details.faq-details .accordion-btn {
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  details.faq-details[open] .accordion-btn {
+    background-color: var(--accent--primary-1);
+    color: var(--neutral--100);
   }
 </style>

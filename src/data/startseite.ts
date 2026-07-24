@@ -12,7 +12,7 @@ export const projekte: string[] = [
   `${CDN}/6968ce4224a9a35261105e8d_hepa-6.jpg`,
   `${CDN}/6968ce4b19aa84f4995b9062_hepa-7.jpg`,
   `${CDN}/693a955bc92c7d98766829fc_Screenshot 2025-12-11 at 10.56.30.png`,
-  `${CDN}/693a95633be9005641ff5af1_Screenshot 2025-12-11 at 10.56.37.png`,
+  // Entfernt auf Kundenwunsch: leerer Flur (…10.56.37.png)
 ];
 
 export interface VorherNachherPaar {

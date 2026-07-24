@@ -22,7 +22,7 @@ const { heading, items } = Astro.props;
             <div class="inner-container _636px _100-mbl">
               <div class="w-layout-grid grid-1-column gap-row-0">
                 {items.map((item, i) => (
-                  <details class:list={['accordion-item-wrapper', 'v2', i === 0 && 'first', i === items.length - 1 && 'last', 'faq-details']}>
+                  <details name="hepa-faq" class:list={['accordion-item-wrapper', 'v2', i === 0 && 'first', i === items.length - 1 && 'last', 'faq-details']}>
                     <summary class="faq-summary">
                       <div class="accordion-content-wrapper width-660px">
                         <div class="accordion-header">
