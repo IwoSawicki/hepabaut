@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Faq from '../components/Faq.astro';
+import { site } from '../data/site';
+
+const faq = [
+  { q: 'Was kostet eine Sanierung oder Renovierung?', a: 'Die Kosten variieren je nach Zustand und Größe der Immobilie sowie nach gewünschter Leistung. Nach einem kostenlosen Vor-Ort-Termin erstellen wir ein individuelles, transparentes Angebot – ohne versteckte Kosten oder böse Überraschungen.' },
+  { q: 'Was unterscheidet HEPA BAUT von anderen Handwerksfirmen?', a: 'Wir beraten Sie offen und transparent und sagen Ihnen klar, was aus unserer Sicht die beste Lösung ist. Ihre Wünsche stehen dabei immer im Mittelpunkt – auch dann, wenn Sie sich für eine andere Umsetzung entscheiden' },
+  { q: 'Wie läuft ein typisches Projekt ab?', a: 'Zunächst besichtigen wir das Objekt kostenlos vor Ort. Danach erhalten Sie ein Angebot mit Zeitplan. Sobald Sie freigeben, beginnen wir mit der Ausführung – strukturiert, sauber und termingetreu. Am Ende erfolgt die gemeinsame Abnahme.' },
+  { q: 'Kann ich nur einzelne Räume renovieren oder sanieren lassen?', a: 'Ja, wir übernehmen auch kleinere Arbeiten – etwa einzelne Räume, Küchen, Bäder oder Flure. Sie müssen kein Komplettpaket buchen – wir richten uns nach Ihrem Bedarf.' },
+  { q: 'Bietet ihr alles aus einer Hand an?', a: 'Nicht alles – aber vieles. Wir übernehmen die wichtigsten Arbeiten im Bereich Sanierung und Renovierung selbst. Wenn zusätzliche Gewerke nötig sind (z. B. Elektrik oder Heizung), holen wir bewährte Partnerfirmen hinzu und koordinieren die Abläufe für Sie. So haben Sie trotzdem nur einen Ansprechpartner und einen klaren Ablaufplan.' },
+  { q: 'Arbeitet ihr nur an einem festen Standort oder auch darüber hinaus?', a: 'Wir sind flexibel im Einsatz und arbeiten in einem größeren Umkreis – je nach Projektgröße und Aufwand. Fragen Sie gerne unverbindlich an – wir prüfen, ob wir Ihr Projekt betreuen können.' },
+];
+---
+<BaseLayout
+  title="Kontakt - Hepa Baut"
+  description="Kontaktieren Sie HePa Baut per Formular, Telefon oder E-Mail. Vor-Ort-Termine nach Vereinbarung in Bürstadt und Umgebung."
+>
+  <section class="mx-auto max-w-6xl px-4 py-16">
+    <h1 class="text-3xl font-bold sm:text-5xl">Kontaktieren Sie uns</h1>
+    <p class="mt-4 max-w-2xl text-[var(--color-muted)]">
+      Nutzen Sie das Kontaktformular oder kontaktieren Sie uns per Telefon oder E-Mail.
+    </p>
+
+    <div class="mt-10 grid gap-12 md:grid-cols-2">
+      <div>
+        <h2 class="text-xl font-semibold">Unsere Kontaktdaten</h2>
+        <ul class="mt-4 space-y-2">
+          <li><a href={`tel:${site.phoneFooterHref}`} class="hover:underline">{site.phoneFooter}</a></li>
+          <li><a href={`mailto:${site.emailKontakt}`} class="hover:underline">{site.emailKontakt}</a></li>
+        </ul>
+        <h2 class="mt-8 text-xl font-semibold">Vorbeikommen mit Terminvereinbarung</h2>
+        <address class="mt-4 not-italic text-[var(--color-muted)]">
+          {site.addressStreet}<br />{site.addressCity}
+        </address>
+      </div>
+
+      <!-- TODO(Phase 4): Formular-Endpoint (Serverless/Formspree) + Spam-Schutz + Consent anbinden. -->
+      <form class="space-y-4" method="post" action="#">
+        <div>
+          <label class="block text-sm font-medium" for="name">Name</label>
+          <input id="name" name="name" required class="mt-1 w-full rounded-lg border border-black/15 px-3 py-2" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium" for="email">E-Mail-Adresse</label>
+          <input id="email" name="email" type="email" required class="mt-1 w-full rounded-lg border border-black/15 px-3 py-2" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium" for="message">Nachricht</label>
+          <textarea id="message" name="message" rows="5" required class="mt-1 w-full rounded-lg border border-black/15 px-3 py-2"></textarea>
+        </div>
+        <button type="submit" class="rounded-full bg-[var(--color-brand)] px-6 py-3 font-semibold text-white">Senden</button>
+        <p class="text-xs text-[var(--color-muted)]">
+          Ihre Nachricht wurde übermittelt. Wir werden uns innerhalb von 48 Stunden bei Ihnen melden.
+        </p>
+      </form>
+    </div>
+  </section>
+
+  <Faq heading="Oft gestellte Fragen" items={faq} />
+</BaseLayout>

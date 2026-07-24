@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+/*
+  Design-Tokens — PLATZHALTER.
+  TODO(1:1): exakte Werte aus mirror-CSS (cdn.prod.website-files.com/.../hepabaut.webflow.shared.*.css)
+  übernehmen, sobald die CSS-/Font-Assets im Repo sind. Aktuell neutrale Näherung, damit das
+  Grundgerüst navigierbar baut — KEINE final abgestimmten Marken-Farben/Fonts.
+*/
+@theme {
+  --color-brand: #1a1a1a;        /* TODO: echte Primärfarbe */
+  --color-brand-accent: #d4a017; /* TODO: echte Akzentfarbe */
+  --color-ink: #1a1a1a;
+  --color-muted: #55585f;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  /* TODO: self-hosted Webflow-Font via @font-face einbinden und hier setzen */
+}
+
+html {
+  scroll-behavior: smooth;
+}
+body {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+}

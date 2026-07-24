@@ -1,0 +1,39 @@
+---
+import { nav, site } from '../data/site';
+---
+<footer class="mt-16 border-t border-black/10 bg-neutral-50">
+  <div class="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:grid-cols-2 md:grid-cols-4">
+    <div>
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--color-muted)]">Navigation</p>
+      <ul class="space-y-2 text-sm">
+        {nav.map((item) => (
+          <li><a href={item.href} class="hover:underline">{item.label}</a></li>
+        ))}
+      </ul>
+    </div>
+    <div>
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--color-muted)]">Kontaktdaten</p>
+      <ul class="space-y-2 text-sm">
+        <li><a href={`tel:${site.phoneFooterHref}`} class="hover:underline">{site.phoneFooter}</a></li>
+        <li><a href={`mailto:${site.emailFooter}`} class="hover:underline">{site.emailFooter}</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--color-muted)]">Adresse</p>
+      <address class="space-y-1 text-sm not-italic">
+        <div>{site.addressStreet}</div>
+        <div>{site.addressCity}</div>
+      </address>
+    </div>
+    <div>
+      <p class="mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--color-muted)]">Rechtliches</p>
+      <ul class="space-y-2 text-sm">
+        <li><a href="/impressum" class="hover:underline">Impressum</a></li>
+        <li><a href="/datenschutz" class="hover:underline">Datenschutz</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="border-t border-black/10 py-4 text-center text-xs text-[var(--color-muted)]">
+    {site.legalName} © {site.year} | Designed by {site.designedBy}
+  </div>
+</footer>

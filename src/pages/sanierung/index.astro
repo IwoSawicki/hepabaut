@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LeistungPage from '../../components/LeistungPage.astro';
+import { leistungenBySlug } from '../../data/leistungen';
+const l = leistungenBySlug['sanierung'];
+---
+<BaseLayout
+  title="Sanierung - Hepa Baut"
+  description="Professionelle Teil- & Komplettsanierungen: Altbau-, Bäder-, Kern- und Haussanierung. Ihr regionaler Handwerker im Raum Heidelberg, Mannheim und Bergstraße."
+>
+  <LeistungPage leistung={l} ortName="Ihrer Stadt" />
+</BaseLayout>

@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LeistungPage from '../../components/LeistungPage.astro';
+import { leistungenBySlug } from '../../data/leistungen';
+const l = leistungenBySlug['renovierung'];
+---
+<BaseLayout
+  title="Renovierung - Hepa Baut"
+  description="Renovierung vom Profi: Maler- und Tapezierarbeiten, Bodenverlegung, Schönheitsreparaturen und Fenster-/Türeinbau. Professionell & ohne Kopfschmerzen."
+>
+  <LeistungPage leistung={l} ortName="Ihrer Stadt" />
+</BaseLayout>

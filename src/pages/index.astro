@@ -1,0 +1,116 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Faq from '../components/Faq.astro';
+import { usps, site } from '../data/site';
+
+const services = [
+  { name: 'Sanierung', href: '/sanierung' },
+  { name: 'Renovierung', href: '/renovierung' },
+  { name: 'Wasserschäden', href: '/wasserschaden' },
+];
+
+// FAQ 1:1 aus mirror (Startseite).
+const faq = [
+  { q: 'Was kostet eine Sanierung oder Renovierung?', a: 'Die Kosten variieren je nach Zustand und Größe der Immobilie sowie nach gewünschter Leistung. Nach einem kostenlosen Vor-Ort-Termin erstellen wir ein individuelles, transparentes Angebot – ohne versteckte Kosten oder böse Überraschungen.' },
+  { q: 'Was unterscheidet HEPA BAUT von anderen Handwerksfirmen?', a: 'Wir beraten Sie offen und transparent und sagen Ihnen klar, was aus unserer Sicht die beste Lösung ist. Ihre Wünsche stehen dabei immer im Mittelpunkt – auch dann, wenn Sie sich für eine andere Umsetzung entscheiden' },
+  { q: 'Wie läuft ein typisches Projekt ab?', a: 'Zunächst besichtigen wir das Objekt kostenlos vor Ort. Danach erhalten Sie ein Angebot mit Zeitplan. Sobald Sie freigeben, beginnen wir mit der Ausführung – strukturiert, sauber und termingetreu. Am Ende erfolgt die gemeinsame Abnahme.' },
+  { q: 'Kann ich nur einzelne Räume renovieren oder sanieren lassen?', a: 'Ja, wir übernehmen auch kleinere Arbeiten – etwa einzelne Räume, Küchen, Bäder oder Flure. Sie müssen kein Komplettpaket buchen – wir richten uns nach Ihrem Bedarf.' },
+  { q: 'Bietet ihr alles aus einer Hand an?', a: 'Nicht alles – aber vieles. Wir übernehmen die wichtigsten Arbeiten im Bereich Sanierung und Renovierung selbst. Wenn zusätzliche Gewerke nötig sind (z. B. Elektrik oder Heizung), holen wir bewährte Partnerfirmen hinzu und koordinieren die Abläufe für Sie. So haben Sie trotzdem nur einen Ansprechpartner und einen klaren Ablaufplan.' },
+  { q: 'Arbeitet ihr nur an einem festen Standort oder auch darüber hinaus?', a: 'Wir sind flexibel im Einsatz und arbeiten in einem größeren Umkreis – je nach Projektgröße und Aufwand. Fragen Sie gerne unverbindlich an – wir prüfen, ob wir Ihr Projekt betreuen können.' },
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    name: site.name,
+    legalName: site.legalName,
+    telephone: site.phonePrimary,
+    email: site.emailKontakt,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: site.addressStreet,
+      addressLocality: site.addressCity,
+      addressCountry: 'DE',
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+---
+<BaseLayout
+  title="Startseite - HePa Baut - Sanierung & Renovierung"
+  description="Sanierung & Renovierung vom Profi im Raum Heidelberg, Mannheim & Bergstraße: von kleinen Reparaturen über Renovierung bis Komplettsanierung und schnelle Hilfe bei Wasserschäden."
+  jsonLd={jsonLd}
+>
+  <!-- Hero -->
+  <section class="bg-neutral-50">
+    <div class="mx-auto max-w-6xl px-4 py-20">
+      <h1 class="max-w-3xl text-4xl font-bold leading-tight sm:text-6xl">Sanierung &amp; Renovierung vom Profi</h1>
+      <p class="mt-5 max-w-2xl text-lg text-[var(--color-muted)]">
+        Von kleinen Reparaturen, über Renovierung, bis hin zur Komplettsanierung, oder schnelle Hilfe bei Wasserschäden:
+        Wir koordinieren alle Gewerke und liefern termintreu.
+      </p>
+      <div class="mt-8 flex flex-wrap items-center gap-4">
+        <a href="/kontakt" class="rounded-full bg-[var(--color-brand)] px-6 py-3 font-semibold text-white">Kontaktformular</a>
+        <a href={`tel:${site.phonePrimaryHref}`} class="font-semibold text-[var(--color-brand-accent)]">{site.phonePrimary}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Leistungen -->
+  <section class="mx-auto max-w-6xl px-4 py-16">
+    <h2 class="text-2xl font-bold sm:text-3xl">„Hepa Baut: Sauber, Zuverlässig und on-time"</h2>
+    <p class="mt-3 max-w-2xl text-[var(--color-muted)]">
+      Ganz egal was bei Ihnen auf der Baustelle ansteht. Hepa Baut ist Ihr zuverlässiger Partner.
+    </p>
+    <div class="mt-8 grid gap-6 sm:grid-cols-3">
+      {services.map((s) => (
+        <a href={s.href} class="rounded-xl border border-black/10 p-8 transition hover:border-[var(--color-brand-accent)]">
+          <h3 class="text-xl font-semibold">{s.name}</h3>
+          <span class="mt-4 inline-block font-semibold text-[var(--color-brand-accent)]">Mehr erfahren →</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Warum HepaBaut -->
+  <section class="bg-neutral-50">
+    <div class="mx-auto max-w-6xl px-4 py-16">
+      <h2 class="mb-8 text-2xl font-bold sm:text-3xl">Warum HepaBaut</h2>
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {usps.map((u, i) => (
+          <div>
+            <div class="mb-2 text-sm font-bold text-[var(--color-brand-accent)]">{String(i + 1).padStart(2, '0')}</div>
+            <h3 class="font-semibold">{u.title}</h3>
+            <p class="mt-2 text-sm text-[var(--color-muted)]">{u.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial -->
+  <section class="mx-auto max-w-3xl px-4 py-16 text-center">
+    <blockquote class="text-2xl font-semibold">„Vom Rohbau bis zum letzten Pinselstrich – alles perfekt"</blockquote>
+    <p class="mt-4 text-[var(--color-muted)]">– Fam. Schneider, Weinheim</p>
+  </section>
+
+  <Faq heading="Oft gestellte Fragen" items={faq} />
+
+  <!-- CTA -->
+  <section class="mx-auto max-w-6xl px-4 py-16 text-center">
+    <h2 class="text-2xl font-bold sm:text-3xl">Kontaktieren Sie uns noch heute und erhalten Sie ein unverbindliches Angebot.</h2>
+    <div class="mt-6 flex flex-wrap justify-center gap-4">
+      <a href="/kontakt" class="rounded-full bg-[var(--color-brand)] px-6 py-3 font-semibold text-white">Kontaktieren</a>
+      <a href={`tel:${site.phonePrimaryHref}`} class="font-semibold text-[var(--color-brand-accent)]">{site.phonePrimary}</a>
+    </div>
+  </section>
+</BaseLayout>

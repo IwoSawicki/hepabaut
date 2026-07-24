@@ -87,10 +87,28 @@ npm run preview   # Build lokal prüfen
 - Commits klein und beschreibend. Arbeit läuft auf Branch
   `claude/hepabaut-webflow-astro-kfvssu`, Push dorthin. Kein PR ohne ausdrücklichen Wunsch.
 
+## Gesicherte Fakten aus mirror/ (Ground Truth)
+
+- Marke **HePa Baut** / juristisch **Hermann und Adam Solar GbR**. Geschäftsführer: Hermann & Adam.
+- Platzhalter im Original = **„Stadtname"** bzw. **„Ihrer Stadt"** (entspricht `{ort}`).
+- Übersichtsseiten existieren für **alle 3** Leistungen (`/sanierung`, `/renovierung`, `/wasserschaden`)
+  — obwohl die Sitemap nur `/renovierung` listet.
+- Assets (CSS/Fonts/Bilder) liegen auf `cdn.prod.website-files.com` — von dieser Umgebung **nicht**
+  erreichbar (Egress-Policy). Für 1:1-Farben/Fonts muss der Mirror mit `--span-hosts` inkl. CDN neu
+  gezogen werden.
+- **Widersprüche im Original (Phase 1 bewusst 1:1 übernommen, Phase-2-Klärung):** zwei Telefonnummern
+  (Hero `+49 6209 298 16 78` vs. Footer `06206 185 7728`); `info@hepasolar.de` (Footer) vs.
+  `info@hepabaut.de` (Kontakt); Adresse Bürstadt (Footer) vs. Mörlenbach (Impressum); Lorem-ipsum in
+  Impressum/Datenschutz/„in Zahlen"; Original nutzt Google Fonts/Analytics/Maps (wir: self-hosted Fonts).
+
 ## Aktueller Stand
 
 - [x] `plan.md`, `CLAUDE.md`, `reference/orte.txt`, `reference/sitemap-urls.txt` angelegt.
-- [ ] `mirror/` im Repo verfügbar (aktuell **nicht** auf dem Branch vorhanden — vom Nutzer angefordert).
-- [ ] Astro-Grundgerüst + eine abgestimmte Beispiel-Ortsseite.
-- [ ] Alle 356 Seiten generiert.
-- [ ] SEO-Härtung / Launch / Ads-Landingpages.
+- [x] `mirror/` im Repo (HTML + sitemap.xml). **Fehlt noch:** CSS/Fonts/Bilder (CDN-Assets).
+- [x] Astro + Tailwind Grundgerüst; datengetriebenes Modell (`orte.ts`, `leistungen.ts`, `site.ts`).
+- [x] Alle Seiten generiert & Build grün: **358 Seiten** (351 Ort + 3 Übersicht + Home + Kontakt +
+      Impressum + Datenschutz), saubere URLs, Sitemap, JSON-LD.
+- [ ] **Visuelles 1:1**: exakte Farben/Fonts/Bilder aus CDN-Assets einsetzen (Platzhalter-Tokens in
+      `src/styles/global.css`).
+- [ ] Ortsseiten-Titles/Metas gegen echte `/<leistung>/<ort>`-Seiten verifizieren (waren nicht im Mirror).
+- [ ] SEO-Härtung Phase 2 / Launch Phase 3 / Ads-Landingpages Phase 4 (siehe `plan.md`).

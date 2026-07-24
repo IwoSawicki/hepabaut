@@ -1,0 +1,71 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LeistungPage from '../../components/LeistungPage.astro';
+import { leistungen, withOrt } from '../../data/leistungen';
+import { orte } from '../../data/orte';
+import { site } from '../../data/site';
+
+// Kartesisches Produkt: 3 Leistungen × 117 Orte = 351 Seiten.
+export const getStaticPaths = (() => {
+  return leistungen.flatMap((l) =>
+    orte.map((o) => ({
+      params: { leistung: l.slug, ort: o.slug },
+      props: { leistungSlug: l.slug, ortSlug: o.slug },
+    })),
+  );
+}) satisfies GetStaticPaths;
+
+const { leistungSlug, ortSlug } = Astro.props as { leistungSlug: string; ortSlug: string };
+const l = leistungen.find((x) => x.slug === leistungSlug)!;
+const o = orte.find((x) => x.slug === ortSlug)!;
+
+const title = withOrt(l.titleTemplate, o.name);
+const description = withOrt(l.metaDescriptionTemplate, o.name);
+const base = Astro.site!.href.replace(/\/$/, '');
+
+const jsonLd: Record<string, unknown>[] = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    serviceType: l.name,
+    name: withOrt(l.heroH1Template, o.name),
+    areaServed: { '@type': 'City', name: o.name },
+    provider: {
+      '@type': 'LocalBusiness',
+      name: site.name,
+      telephone: site.phonePrimary,
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: site.addressStreet,
+        addressLocality: site.addressCity,
+        addressCountry: 'DE',
+      },
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${base}/` },
+      { '@type': 'ListItem', position: 2, name: l.name, item: `${base}/${l.slug}` },
+      { '@type': 'ListItem', position: 3, name: o.name, item: `${base}/${l.slug}/${o.slug}` },
+    ],
+  },
+];
+
+if (l.faq.length > 0) {
+  jsonLd.push({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: l.faq.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  });
+}
+---
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+  <LeistungPage leistung={l} ortName={o.name} />
+</BaseLayout>

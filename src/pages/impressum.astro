@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+// Inhalt 1:1 aus mirror. Hinweis: Original enthält Lorem-ipsum-Einleitung und abweichende
+// Adresse (Mörlenbach) ggü. Footer (Bürstadt) — in Phase 1 bewusst 1:1, Klärung in Phase 2.
+---
+<BaseLayout title="Impressum - Hepa Baut">
+  <section class="mx-auto max-w-3xl px-4 py-16">
+    <h1 class="text-3xl font-bold sm:text-4xl">Impressum</h1>
+    <p class="mt-6 text-[var(--color-muted)]">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+      dolore magna aliqua massa sed elementum.
+    </p>
+
+    <h2 class="mt-8 text-xl font-semibold">Verantwortlich für den Inhalt</h2>
+    <address class="mt-3 not-italic text-[var(--color-muted)]">
+      Herrmann und Adam Solar GbR<br />
+      Gerhart-Hauptmannstrasse 8<br />
+      69509 Mörlenbach
+    </address>
+
+    <h2 class="mt-8 text-xl font-semibold">Kontakt</h2>
+    <ul class="mt-3 space-y-1 text-[var(--color-muted)]">
+      <li><a href="mailto:info@hepasolar.de" class="hover:underline">info@hepasolar.de</a></li>
+      <li><a href="tel:+4962061857728" class="hover:underline">+49 6206 1857728</a></li>
+    </ul>
+
+    <h2 class="mt-8 text-xl font-semibold">Umsatzsteuer-ID</h2>
+    <p class="mt-3 text-[var(--color-muted)]">DE353841248</p>
+  </section>
+</BaseLayout>
