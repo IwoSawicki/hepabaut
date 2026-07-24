@@ -1,0 +1,11 @@
+# Build-Kontext klein halten — Mirrors und Git sind >150 MB und werden nicht gebraucht
+.git
+node_modules
+dist
+.astro
+mirror
+mirror-v3
+reference
+scripts
+*.md
+.env*
