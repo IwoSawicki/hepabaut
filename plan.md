@@ -1,126 +1,113 @@
 # Projektplan: hepabaut.de — Webflow → Astro (1:1, dann SEO)
 
-> Ziel: Bestehende Webflow-Seite **1:1** nach **Astro + Tailwind** übernehmen (Fonts, Farben,
-> Layout, Texte identisch), Rankings erhalten, danach hart SEO-optimieren und neue
-> Landingpages für Google Ads bauen (Ads-Start in ~1–2 Wochen).
+> Ziel: Bestehende Webflow-Seite **pixelgenau 1:1** nach Astro + Tailwind übernehmen (Fonts,
+> Farben, Abstände, Größen, Layout, Texte, responsives Verhalten), Rankings erhalten, danach hart
+> SEO-optimieren und neue Landingpages für Google Ads bauen. Architektur: **ein Template pro
+> Leistung, datengetrieben (CSV), maximal wiederverwendbare Sections** — Pflege und künftige
+> Erweiterung sollen möglichst wenig Aufwand (und künftig möglichst wenig KI-Tokens) kosten.
 
-Ergänzend: `CLAUDE.md` (Arbeitsregeln), `reference/orte.txt` (117 Ort-Slugs),
-`reference/sitemap-urls.txt` (alle 356 Original-URLs).
-
----
-
-## 1. Bestandsaufnahme (aus der Sitemap gesichert)
-
-- **Programmatic SEO:** 3 Leistungen × 117 Orte, `{ort}`-Platzhalter im Text.
-- **3 Leistungen:** `sanierung`, `renovierung`, `wasserschaden`.
-- **117 Orte** (Raum Heidelberg / Mannheim / Bergstraße / Odenwald / Vorderpfalz).
-- **356 Seiten gesamt:** 351 Ortsseiten + Start + `/renovierung` + `/kontakt` + `/impressum`
-  + `/datenschutz`.
-- **URL-Muster (unverändert übernehmen):** `/<leistung>/<ort>`, Slug `wasserschaden` singular
-  ohne Umlaut, Ort-Slugs ASCII-gefaltet.
-- **Offen (am `mirror/` zu klären):** Gibt es Übersichtsseiten für `sanierung` und
-  `wasserschaden`? In der Sitemap steht nur `/renovierung`.
+Ergänzend: `CLAUDE.md` (verbindliche Architektur- und Arbeitsregeln), `src/data/orte.csv`
+(Ortsliste), `reference/` (Sitemap-Fakten).
 
 ---
 
-## 2. Offener Punkt: `mirror/` fehlt im Repo ⚠️
+## 1. Stand heute
 
-Der Branch `claude/hepabaut-webflow-astro-kfvssu` enthält aktuell **nur** die Planungsdateien —
-**kein `mirror/`-Ordner**. Für den 1:1-Nachbau (Farben, Fonts, exakte Texte, Meta-Tags) ist der
-Mirror die verbindliche Vorlage.
+**Fertig:**
+- Astro 5 + Tailwind 4 Grundgerüst, Build grün, **358 Seiten** (351 Ort + 3 Übersicht + Home +
+  Kontakt + Impressum + Datenschutz).
+- **Ein** Ortsseiten-Template (`[leistung]/[ort].astro` + `LeistungPage.astro`) erzeugt alle 351
+  Kombinationen per `getStaticPaths()` — keine Datei pro Ort.
+- Orte-Datenquelle auf **CSV umgestellt** (`src/data/orte.csv`): neuer Ort = eine Zeile, kein Code.
+- Texte 1:1 aus dem Mirror extrahiert (Sanierung/Renovierung/Wasserschaden/Home/Kontakt/
+  Impressum/Datenschutz).
+- SEO-Grundgerüst: saubere URLs (kein `.html`), Canonical, Sitemap, JSON-LD (LocalBusiness/
+  Service/Breadcrumb/FAQPage).
+- `mirror-v3/` mit **vollständigen CDN-Assets** (CSS, Onest-Fonts, Bilder, Logo, SVGs) + echten
+  Beispiel-Ortsseiten liegt jetzt vor — Design-Fakten daraus bereits gesichert (siehe `CLAUDE.md`:
+  Farb-Tokens, Schriftart „Onest", Breakpoints, Typo-Skala).
 
-**Bitte prüfen:**
-- Wurde der Ordner auf **genau diesen Branch** gepusht? (`git branch` → sollte
-  `claude/hepabaut-webflow-astro-kfvssu` sein.)
-- Beim GitHub-Web-Upload: Ordner samt Inhalt hochgeladen und **committet**?
-- Wurden große Dateien (>100 MB) von GitHub abgelehnt? Dann Medien vorher aussortieren
-  (`--reject "*.mp4,*.mov,*.zip"`) oder als ZIP hochladen — ich entpacke es hier.
-
-Sobald `mirror/` da ist, starte ich Phase 0/1.
-
----
-
-## 3. Architektur (Astro + Tailwind)
-
-Datengetrieben statt 400× Handarbeit — dein `{ort}`-Prinzip als Code:
-
-```
-src/
-  data/
-    orte.ts          # [{ slug, name }]  (name = Anzeigename mit Umlaut, aus mirror)
-    leistungen.ts    # 3 Leistungen: slug, name, title/meta-Template, Textbausteine mit {ort}
-  layouts/BaseLayout.astro      # <head>, Meta, Canonical, JSON-LD, Header/Footer
-  components/                    # Hero, LeistungBlock, FAQ, CTA, Header, Footer …
-  pages/
-    index.astro
-    renovierung/index.astro      # (+ ggf. sanierung/, wasserschaden/ – je nach mirror)
-    kontakt.astro, impressum.astro, datenschutz.astro
-    [leistung]/[ort].astro       # getStaticPaths(): Leistung × Ort = 351 Seiten
-  styles/global.css              # Tailwind + self-hosted Fonts + Farb-Tokens aus mirror
-public/                          # Bilder, Fonts, robots.txt
-```
-
-`[leistung]/[ort].astro` erzeugt via `getStaticPaths()` das kartesische Produkt und ersetzt
-`{ort}` in allen Bausteinen — exakt dein Webflow-CMS-Prinzip, nur zentral und versioniert.
-
-**Farben & Fonts:** werden aus dem `mirror/`-CSS ausgelesen und als Tailwind-Theme-Tokens
-hinterlegt (keine „ungefähren" Werte). Fonts self-hosted.
+**Offen:** Das eigentliche **visuelle 1:1** — Design-Tokens und Original-Werte sind identifiziert,
+aber noch nicht in Komponenten/Styles eingebaut. Das ist der nächste Arbeitsblock.
 
 ---
 
-## 4. Phasenplan
+## 2. Architektur-Prinzipien (aus deinem Feedback, jetzt verbindlich in CLAUDE.md)
 
-### Phase 0 — Setup (nach `mirror/`)
-- [ ] Astro + Tailwind initialisieren, `@astrojs/sitemap`, Sharp.
-- [ ] Farb-/Font-Tokens + globale Styles aus `mirror/`-CSS ableiten.
-- [ ] Header/Footer als Komponenten (aus mirror).
-
-### Phase 1 — 1:1-Nachbau
-- [ ] `orte.ts` mit Slug + **Anzeigename** (Anzeigenamen aus mirror-H1s ziehen).
-- [ ] `leistungen.ts`: Textbausteine je Leistung mit `{ort}` (Texte 1:1 aus mirror).
-- [ ] `[leistung]/[ort].astro` → 351 Seiten generieren.
-- [ ] Statische Seiten: Start, `/renovierung`(+ggf. weitere Übersichten), Kontakt,
-      Impressum, Datenschutz — Inhalt 1:1.
-- [ ] Title/Meta/Canonical je Seite exakt wie Original.
-- [ ] Visueller Abgleich Original vs. Nachbau (Stichproben je Leistung + mehrere Orte).
-
-### Phase 2 — SEO-Härtung
-- [ ] JSON-LD: LocalBusiness, Service + `areaServed`, BreadcrumbList, FAQPage.
-- [ ] `@astrojs/sitemap` + `robots.txt`, OG/Twitter-Cards.
-- [ ] Core Web Vitals: `astro:assets` (WebP/AVIF, width/height, lazy), kritisches CSS inline,
-      Fonts `font-display:swap`, null Client-JS auf Inhaltsseiten.
-- [ ] Interne Verlinkung: jede Ortsseite → Nachbarorte + andere 2 Leistungen am selben Ort.
-- [ ] Thin-Content entschärfen: pro Ort echte lokale Signale/Textvarianten (nicht nur Name tauschen).
-
-### Phase 3 — Launch / Migration (Ranking-Erhalt)
-- [ ] URL-Mapping alt→neu = 1:1 (Abgleich gegen `reference/sitemap-urls.txt`).
-- [ ] 301-Redirects nur falls unvermeidbar; Staging-Preview prüfen.
-- [ ] Hosting (Cloudflare Pages / Netlify / Vercel), Domain/DNS, SSL.
-- [ ] Search Console: neue Sitemap einreichen, Abdeckung/Rankings beobachten; alte Seite erst
-      nach bestätigter Indexierung abschalten.
-
-### Phase 4 — Ads-Landingpages (parallel möglich, damit Ads pünktlich starten)
-- [ ] Conversion-fokussierte LPs (Formular + Klick-to-Call, Trust-Signale, Message-Match).
-- [ ] Formular-Endpoint (Serverless/Formspree) → Anfrage per E-Mail + Spam-Schutz.
-- [ ] DSGVO: Consent Mode v2 + Cookie-Banner, GA4 + Google-Ads-Conversion-Tag.
+1. **Ein Template pro Leistungstyp**, nie einzelne Ortsseiten von Hand. ✅ bereits so gebaut.
+2. **CSV/Daten statt Code** für alles, was sich wiederholt (Orte). ✅ umgesetzt. Leistungstexte
+   bleiben strukturiert in TS (3 Stück, tief verschachtelt — kein guter CSV-Fit), aber ebenfalls
+   strikt getrennt von Layout.
+3. **Wiederverwendbare Sections**: Hero, ServiceCards, USP-Grid, FAQ-Akkordeon, CTA,
+   Vorher/Nachher-Slider etc. als eigene Komponenten, die auf allen Seiten gleich benutzt werden.
+4. **Token-Effizienz für die Zukunft**: Neuer Ort = 1 CSV-Zeile. Neue Landingpage = neue kleine
+   Seite, die bestehende Sections wiederverwendet. Kein erneutes „Durchbauen" der ganzen Seite
+   nötig — genau das reduziert künftigen Aufwand (manuell wie mit KI-Unterstützung).
 
 ---
 
-## 5. Zeitplan (Richtwert)
+## 3. Wie wir jetzt vorgehen: Section-für-Section-Nachbau
 
-| Phase | Inhalt | Dauer |
-|---|---|---|
-| 0 | Setup, Farben/Fonts, Header/Footer | 1 Tag |
-| 1 | 1:1-Nachbau + 356 Seiten | 2–3 Tage |
-| 2 | SEO-Härtung | 2 Tage |
-| 3 | Launch/Migration | 1–2 Tage |
-| 4 | Ads-Landingpages + Tracking (parallel zu 2/3) | 2–3 Tage |
+Statt das komplette ~18.000-Zeilen-Original-CSS auf einmal zu verarbeiten (ineffizient und
+fehleranfällig), gehen wir **Seite für Seite, Section für Section** vor — mit der Startseite
+zuerst:
+
+### Schritt 1 — Design-Fundament (einmalig, für alle Seiten)
+- [ ] Onest-Fontdateien aus `mirror-v3` nach `public/fonts/` kopieren, `@font-face` in
+      `global.css` einbinden (400/500/700).
+- [ ] Echte Farb-Tokens (`--accent--primary-1`, `--secondary--color-1/2`, Neutral-Skala) als
+      Tailwind-`@theme`-Variablen übernehmen.
+- [ ] Breakpoints (479/767/991/1440/1920) in Tailwind-Konfiguration abbilden.
+- [ ] Basis-Typo (Body-Größe/Zeilenhöhe, `.display-*`-Skala) übernehmen.
+
+### Schritt 2 — Startseite, Section für Section
+Für jede Section auf `/`: exakte Klasse(n) im `mirror-v3`-HTML identifizieren → gezielt im
+Original-CSS nachschlagen → als Astro-Komponente + Tailwind-Utilities nachbauen → mit dem
+Original nebeneinander (Screenshot/Browser) vergleichen.
+- [ ] Header/Navigation (Logo, Menü, „Rückruf vereinbaren"-Button)
+- [ ] Hero (Headline, Subline, CTA-Buttons)
+- [ ] „Warum HepaBaut" USP-Grid
+- [ ] Leistungs-Kacheln (Sanierung/Renovierung/Wasserschäden)
+- [ ] Vorher/Nachher-Bereich
+- [ ] Testimonial
+- [ ] FAQ-Akkordeon
+- [ ] CTA-Sektion
+- [ ] Footer
+
+Diese Sections werden als **wiederverwendbare Komponenten** gebaut (nicht Homepage-spezifisch
+verdrahtet), damit Übersichts- und Ortsseiten sie direkt weiterverwenden.
+
+### Schritt 3 — Übersichts- & Ortsseiten mit denselben Sections
+- [ ] `/sanierung`, `/renovierung`, `/wasserschaden` mit den fertigen Sections zusammensetzen.
+- [ ] Eine Ortsseite (`/sanierung/heidelberg`) 1:1 gegen `mirror-v3` prüfen → Template gilt dann
+      automatisch für alle 351 Kombinationen.
+
+### Schritt 4 — Kontakt / Impressum / Datenschutz
+- [ ] Formularlayout, Legal-Texte visuell 1:1.
+
+### Schritt 5 — Responsive- & Detail-Check
+- [ ] Alle Breakpoints durchgehen (Mobile/Tablet/Desktop/große Screens), gegen Original abgleichen.
+- [ ] Bilder optimiert einbinden (`astro:assets`, WebP/AVIF, richtige `width`/`height`).
+
+*(Phasen 2–4 aus dem ursprünglichen Plan — SEO-Härtung, Migration/Launch, Ads-Landingpages —
+bleiben wie zuvor beschrieben, folgen nach dem visuellen 1:1. Kurzfassung unten.)*
 
 ---
 
-## 6. Nächster Schritt
+## 4. Spätere Phasen (Kurzfassung, Details bei Bedarf wieder ausführlich)
 
-1. **`mirror/` auf den Branch bringen** (siehe Abschnitt 2).
-2. Ich lese Farben/Fonts/Texte/Meta aus, baue **eine** Beispiel-Ortsseite
-   (`sanierung/<musterort>`) zur Abstimmung.
-3. Nach deinem „passt" → alle 356 Seiten + Phase 2.
+- **Phase SEO-Härtung:** interne Verlinkung (Nachbarorte, andere Leistungen am selben Ort),
+  Thin-Content-Vermeidung, OG-Tags, Core-Web-Vitals-Feinschliff.
+- **Phase Launch:** URL-Abgleich gegen `reference/sitemap-urls.txt`, Hosting-Setup, Search
+  Console, alte Seite erst nach bestätigter Indexierung abschalten.
+- **Phase Ads-Landingpages:** neue, conversion-fokussierte Seiten aus denselben Sections gebaut,
+  Formular-Endpoint, DSGVO-Consent, Tracking.
+
+---
+
+## 5. Nächster Schritt
+
+**Wir starten mit Schritt 1 (Design-Fundament) + Schritt 2 (Startseite, Section für Section).**
+Ich baue nacheinander die einzelnen Sections der Startseite, jeweils mit den echten Werten aus
+`mirror-v3`, und wir schauen uns das Ergebnis zwischendurch an (Dev-Server/Screenshots). Sag
+kurz „los geht's", dann fange ich mit Header + Hero an.
