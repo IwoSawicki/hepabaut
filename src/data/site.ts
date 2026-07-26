@@ -1,16 +1,15 @@
-// Zentrale Seiten-Daten (1:1 aus mirror/). Werte mit Widersprüchen im Original sind unten markiert
-// und werden in Phase 1 bewusst 1:1 übernommen (Korrektur erst in Phase 2, nach Rücksprache).
-
+// Zentrale Seiten-Daten. Telefon & E-Mail vom Kunden bestätigt (06206 185 7728, info@hepabaut.de).
+// HINWEIS Adresse: Impressum nutzt die ladungsfähige Anschrift Mörlenbach (Gerhart-Hauptmann-Str. 8).
+// Footer/Kontakt zeigen weiterhin die Adresse Bürstadt (Steinlachstraße 66) — vom Kunden bestätigen,
+// ob Bürstadt ein separater Standort ist oder vereinheitlicht werden soll.
 export const site = {
   name: 'HePa Baut',
   legalName: 'Hermann und Adam Solar GbR',
-  // Original: Hero-/CTA-Telefon vs. Footer-Telefon unterscheiden sich — beide 1:1 behalten.
-  phonePrimary: '+49 6209 298 16 78', // Hero-/CTA-Nummer
-  phonePrimaryHref: '+4962092981678',
-  phoneFooter: '06206 185 7728', // Footer/Kontaktdaten
+  phonePrimary: '06206 185 7728',
+  phonePrimaryHref: '+4962061857728',
+  phoneFooter: '06206 185 7728',
   phoneFooterHref: '+4962061857728',
-  // Original: Footer nennt info@hepasolar.de, Kontaktseite info@hepabaut.de — beide 1:1 behalten.
-  emailFooter: 'info@hepasolar.de',
+  emailFooter: 'info@hepabaut.de',
   emailKontakt: 'info@hepabaut.de',
   addressStreet: 'Steinlachstraße 66',
   addressCity: '68642 Bürstadt',
