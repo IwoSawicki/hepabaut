@@ -17,6 +17,8 @@ interface Props {
   ctaVariant?: CtaVariant;
   ctaLabel?: string;
   ctaBtnClass?: string;
+  /** Ziel des Haupt-CTA (Standard /kontakt; Ads-LP setzt hier den On-Page-Anker #form-hero). */
+  ctaHref?: string;
   /** tel:-Href der Telefonzeile (Original variiert zwischen den Seiten) */
   telHref?: string;
   /** Original-w-node-IDs für Item 2 und 4 (justify-self:end im Original-CSS) */
@@ -30,9 +32,12 @@ const {
   ctaVariant = 'primary4-phone',
   ctaLabel = 'Unverbindlich Beraten',
   ctaBtnClass = 'btn-primary-2 w-inline-block',
+  ctaHref = '/kontakt',
   telHref = 'tel:+4962061857728',
   nodeIds = ['w-node-c4fd44da-1ffe-0352-b5d9-f3e43ebd8839-f0fa7cd8', 'w-node-c4fd44da-1ffe-0352-b5d9-f3e43ebd8849-f0fa7cd8'],
 } = Astro.props;
+// On-Page-Anker (#…) nicht in neuem Tab öffnen; interne Seiten wie im Original mit _blank.
+const ctaTarget = ctaHref.startsWith('#') ? undefined : '_blank';
 ---
 <div>
   <article id="vorteile" class={articleClass}>
@@ -62,7 +67,7 @@ const {
       </div>
       {ctaVariant === 'primary4-phone' && (
         <div class="flex-horizontal gap-20 mg-top-32px">
-          <a href="/kontakt" target="_blank" class="btn-primary-4 w-button">{ctaLabel}</a>
+          <a href={ctaHref} target={ctaTarget} class="btn-primary-4 w-button">{ctaLabel}</a>
           <a href={telHref} class="cta-telefonnummer w-inline-block">
             <img src="/cdn/67eacdeb6f6d737ef0fa7cd2/682f0a2854d6f9fb2051432f_phone-call.png" loading="lazy" alt="" class="image-3" />
             <p class="cta-telefonnummer black">06206 185 7728</p>
@@ -72,7 +77,7 @@ const {
       {ctaVariant === 'buttons-row-phone' && (
         <div class="mg-top-32px">
           <div class="buttons-row center">
-            <a href="/kontakt" class="btn-primary button-row w-inline-block">
+            <a href={ctaHref} class="btn-primary button-row w-inline-block">
               <div class="flex-horizontal">
                 <div>{ctaLabel}</div>
                 <div class="arrow-icon">&#xE900;</div>
@@ -88,7 +93,7 @@ const {
       {ctaVariant === 'buttons-row-only' && (
         <div class="mg-top-32px">
           <div class="buttons-row center">
-            <a href="/kontakt" class={ctaBtnClass}>
+            <a href={ctaHref} class={ctaBtnClass}>
               <div class="flex-horizontal">
                 <div>{ctaLabel}</div>
                 <div class="arrow-icon">&#xE900;</div>

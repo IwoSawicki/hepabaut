@@ -1,0 +1,50 @@
+---
+// Conversion-Hooks für Google Ads / GA4. Bindet Klicks auf Telefon- & WhatsApp-Links und stellt
+// window.hepaTrackLead() bereit (wird vom Formular-Skript nach erfolgreichem Absenden gerufen).
+// WICHTIG: komplett INERT, solange kein Tracking aktiv ist — window.gtag existiert dann nicht,
+// also passiert nichts (keine Cookies, keine Requests). Erst wenn echte IDs in tracking.ts stehen
+// und der Nutzer im Banner zustimmt, feuern die Events.
+import { tracking } from '../data/tracking';
+---
+<script
+  is:inline
+  define:vars={{ adsId: tracking.ADS_ID, label: tracking.ADS_CONVERSION_LABEL }}
+>
+  (function () {
+    function gt() {
+      return typeof window.gtag === 'function' ? window.gtag : null;
+    }
+    // Google-Ads-Conversion (nur wenn ID + Label hinterlegt sind).
+    function adsConversion(kind) {
+      var g = gt();
+      if (g && adsId && label) {
+        g('event', 'conversion', { send_to: adsId + '/' + label, event_source: kind });
+      }
+    }
+    // Vom Formular-Skript (BaseLayout / LandingLayout) nach Erfolg aufgerufen.
+    window.hepaTrackLead = function (formName) {
+      var g = gt();
+      if (g) g('event', 'generate_lead', { form: formName || 'kontakt' });
+      adsConversion('form');
+    };
+    // Telefon- & WhatsApp-Klicks als (Micro-)Conversions.
+    document.addEventListener(
+      'click',
+      function (e) {
+        var a = e.target && e.target.closest ? e.target.closest('a') : null;
+        if (!a) return;
+        var href = a.getAttribute('href') || '';
+        var g = gt();
+        if (!g) return;
+        if (href.indexOf('tel:') === 0) {
+          g('event', 'call_click');
+          adsConversion('call');
+        } else if (href.indexOf('wa.me') !== -1 || href.indexOf('api.whatsapp.com') !== -1) {
+          g('event', 'whatsapp_click');
+          adsConversion('whatsapp');
+        }
+      },
+      true,
+    );
+  })();
+</script>

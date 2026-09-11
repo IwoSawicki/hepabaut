@@ -3,6 +3,9 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import StickyContact from '../components/StickyContact.astro';
+import Analytics from '../components/Analytics.astro';
+import ConsentBanner from '../components/ConsentBanner.astro';
+import ConversionTracking from '../components/ConversionTracking.astro';
 import { site } from '../data/site';
 
 interface Props {
@@ -42,6 +45,9 @@ const canonical = new URL(cleanPath, Astro.site).href.replace(/\/$/, cleanPath =
     {jsonLd.map((obj) => (
       <script type="application/ld+json" set:html={JSON.stringify(obj)} />
     ))}
+
+    <!-- Tracking: rendert nur, wenn in src/data/tracking.ts echte IDs stehen (sonst 0 Bytes). -->
+    <Analytics />
   </head>
   <body>
     <div class="page-wrapper">
@@ -52,6 +58,8 @@ const canonical = new URL(cleanPath, Astro.site).href.replace(/\/$/, cleanPath =
       <Footer />
     </div>
     <StickyContact />
+    <ConsentBanner />
+    <ConversionTracking />
 
     <!--
       Formular-Absenden via FormSubmit.co (Progressive Enhancement):
@@ -80,6 +88,10 @@ const canonical = new URL(cleanPath, Astro.site).href.replace(/\/$/, cleanPath =
             if (res.ok) {
               form.style.display = 'none';
               if (done) done.style.display = 'block';
+              // Conversion melden (nur aktiv, wenn Tracking konfiguriert ist).
+              if (typeof window.hepaTrackLead === 'function') {
+                window.hepaTrackLead(form.getAttribute('data-form-name') || 'kontakt');
+              }
             } else {
               throw new Error('bad status');
             }

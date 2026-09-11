@@ -1,0 +1,81 @@
+---
+// Minimaler DSGVO-Cookie-Banner. Nur aktiv, wenn Tracking konfiguriert ist (echte IDs).
+// Speichert die Wahl in localStorage und aktualisiert Google Consent Mode v2 entsprechend.
+// Bewusst schlank & eigenständig (kein Drittanbieter) — für 1 Analytics/Ads-Tag ausreichend.
+// Bei umfangreicherem Tracking später ggf. auf Cookiebot/Usercentrics wechseln.
+import { trackingEnabled } from '../data/tracking';
+---
+{trackingEnabled && (
+  <div id="consent-banner" class="consent-banner" hidden>
+    <div class="consent-inner">
+      <p class="consent-text">
+        Wir verwenden Cookies und Tools (u. a. Google Analytics/Ads), um unsere Website zu
+        verbessern und den Erfolg von Anzeigen zu messen. Sie können frei entscheiden.
+        Mehr dazu in unserer <a href="/datenschutz">Datenschutzerklärung</a>.
+      </p>
+      <div class="consent-actions">
+        <button type="button" class="consent-btn consent-decline" data-consent="deny">Ablehnen</button>
+        <button type="button" class="consent-btn consent-accept" data-consent="grant">Akzeptieren</button>
+      </div>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var KEY = 'hepa-consent-v1';
+      var banner = document.getElementById('consent-banner');
+      if (!banner) return;
+      function apply(state) {
+        if (typeof window.gtag === 'function') {
+          window.gtag('consent', 'update', {
+            ad_storage: state,
+            ad_user_data: state,
+            ad_personalization: state,
+            analytics_storage: state,
+          });
+        }
+      }
+      var saved = null;
+      try { saved = localStorage.getItem(KEY); } catch (e) {}
+      if (saved === 'grant' || saved === 'deny') {
+        apply(saved === 'grant' ? 'granted' : 'denied');
+      } else {
+        banner.hidden = false;
+      }
+      banner.querySelectorAll('[data-consent]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var choice = btn.getAttribute('data-consent');
+          try { localStorage.setItem(KEY, choice); } catch (e) {}
+          apply(choice === 'grant' ? 'granted' : 'denied');
+          banner.hidden = true;
+        });
+      });
+    })();
+  </script>
+
+  <style is:global>
+    .consent-banner {
+      position: fixed;
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      z-index: 1000;
+      max-width: 560px;
+      margin-inline: auto;
+      background: var(--neutral--100, #fff);
+      color: var(--neutral--800, #131313);
+      border: 1px solid var(--neutral--400, #ddd);
+      border-radius: 14px;
+      box-shadow: 0 18px 44px rgba(6, 49, 55, 0.22);
+      padding: 20px;
+      font-family: 'Onest', sans-serif;
+    }
+    .consent-text { margin: 0 0 14px; font-size: 14px; line-height: 1.5; }
+    .consent-text a { color: var(--accent--primary-1, #06c35d); text-decoration: underline; }
+    .consent-actions { display: flex; gap: 10px; justify-content: flex-end; }
+    .consent-btn { border-radius: 999px; padding: 10px 20px; font-size: 14px; font-weight: 500; cursor: pointer; border: 1px solid var(--neutral--400, #ddd); }
+    .consent-decline { background: transparent; color: var(--neutral--700, #353535); }
+    .consent-accept { background: var(--accent--primary-1, #06c35d); color: #fff; border-color: var(--accent--primary-1, #06c35d); }
+    @media (max-width: 479px) { .consent-actions { flex-direction: column-reverse; } .consent-btn { width: 100%; } }
+  </style>
+)}

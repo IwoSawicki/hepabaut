@@ -1,0 +1,36 @@
+---
+// Google Consent Mode v2 + GA4 + Google Ads. Wird NUR gerendert, wenn in src/data/tracking.ts
+// echte IDs hinterlegt sind — sonst bleibt die Seite komplett tracking-/cookiefrei.
+// Standard: alle Consent-Kategorien DENIED (DSGVO-konform), erst nach Einwilligung im Banner
+// werden sie via gtag('consent','update',…) freigeschaltet (ConsentBanner.astro).
+import { tracking, trackingEnabled } from '../data/tracking';
+---
+{trackingEnabled && (
+  <>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      window.gtag = gtag;
+      // Consent Mode v2 — Standard: alles abgelehnt, bis der Nutzer zustimmt.
+      gtag('consent', 'default', {
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        analytics_storage: 'denied',
+        functionality_storage: 'granted',
+        security_storage: 'granted',
+        wait_for_update: 500,
+      });
+      gtag('js', new Date());
+    </script>
+    <script
+      is:inline
+      src={`https://www.googletagmanager.com/gtag/js?id=${tracking.GA4_ID || tracking.ADS_ID}`}
+      async
+    ></script>
+    <script is:inline define:vars={{ ga4: tracking.GA4_ID, ads: tracking.ADS_ID }}>
+      if (ga4) gtag('config', ga4, { anonymize_ip: true });
+      if (ads) gtag('config', ads);
+    </script>
+  </>
+)}

@@ -23,6 +23,24 @@ Upsell Betreuung (750 €+/Monat), später Recruiting etc.
 - **Wasserschaden:** 0 Nachfrage in den Daten → als SEO-Säule streichen (nur als Unterpunkt/
   Ads-Thema behalten).
 
+### ⚠️ Wichtig: GSC ist ein Blind Spot, kein Marktvolumen
+
+Die GSC-Zahlen sind eine **Untergrenze**, nicht das echte Suchvolumen. Zwei Effekte:
+
+1. **Nur Queries, für die wir schon ranken, tauchen auf.** Für „Badsanierung Weinheim" stehen wir
+   bei ~0 % → **kein Datenpunkt**, obwohl das Keyword stark gesucht wird. „Fehlt in GSC" ≠
+   „wird nicht gesucht". Neue Keyword-Felder (z. B. Badsanierung) sind in den Daten unsichtbar,
+   aber real und wertvoll — sie zu besetzen erschließt komplett neuen, kaufstarken Traffic.
+2. **Impressionen sind nach unten verzerrt.** Eine Impression zählt erst, wenn die Position
+   tatsächlich gerendert wird. Auf Seite 2/3 passiert das nur, wenn jemand dorthin scrollt
+   (< 1 % der Sucher). Unsere 30–40 Impressionen bei Position ~15–20 entsprechen daher einem
+   echten Suchvolumen, das leicht **20–50× höher** liegt.
+
+**Konsequenz:** Architektur an echten Such-Intents ausrichten (Keyword-Recherche + Branchenlogik),
+NICHT nur an dem, wo wir zufällig schon schwach ranken. Badsanierung ist genau so ein
+verborgenes Feld → deshalb erste Ads-Landingpage. Für die SEO-Priorisierung heißt das:
+GSC-Daten als „warmen Startpunkt" nutzen, aber bewusst neue Money-Keywords ergänzen.
+
 ---
 
 ## 2. Leistungs-Logik (Sanierung vs. Renovierung vs. …)

@@ -8,8 +8,19 @@ interface Props {
   titleClass?: string;
   withEmail?: boolean;
   sectionClass?: string;
+  /** E-Mail-Betreff, der bei FormSubmit ankommt (zur Zuordnung von Ads-Leads). */
+  subject?: string;
+  /** interner Name für Conversion-Tracking + verstecktes „quelle"-Feld (z. B. „ads-badsanierung-weinheim"). */
+  formName?: string;
 }
-const { title, titleClass = 'display-8 white', withEmail = false, sectionClass = 'section-5 hero v25' } = Astro.props;
+const {
+  title,
+  titleClass = 'display-8 white',
+  withEmail = false,
+  sectionClass = 'section-5 hero v25',
+  subject = 'Neue Anfrage über hepabaut.de',
+  formName = 'kontakt',
+} = Astro.props;
 ---
 <section class={sectionClass}>
   <div class="w-layout-blockcontainer container-default-7 w-container">
@@ -18,9 +29,10 @@ const { title, titleClass = 'display-8 white', withEmail = false, sectionClass =
       <div class="z-index-1">
         <div class="inner-container _692px center">
           <div class="demo-form-block w-form">
-            <form action="https://formsubmit.co/iwo@stolz-marketing.de" method="POST" class="demo-form" data-ajax-form>
+            <form action="https://formsubmit.co/iwo@stolz-marketing.de" method="POST" class="demo-form" data-ajax-form data-form-name={formName}>
               {title && <h2 class={titleClass}>{title}</h2>}
-              <input type="hidden" name="_subject" value="Neue Anfrage über hepabaut.de" />
+              <input type="hidden" name="_subject" value={subject} />
+              <input type="hidden" name="quelle" value={formName} />
               <input type="hidden" name="_template" value="table" />
               <input type="hidden" name="_captcha" value="false" />
               <input type="text" name="_honey" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true" />

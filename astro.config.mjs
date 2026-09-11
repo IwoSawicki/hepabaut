@@ -11,5 +11,6 @@ export default defineConfig({
   // die Hosts unter dem sauberen Pfad ausliefern.
   build: { format: 'directory' },
   vite: { plugins: [tailwindcss()] },
-  integrations: [sitemap()],
+  // Ads-Landingpages (/angebot/*) sind noindex → nicht in die Sitemap aufnehmen.
+  integrations: [sitemap({ filter: (page) => !page.includes('/angebot/') })],
 });

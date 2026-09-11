@@ -1,0 +1,167 @@
+---
+// Schlanke Layout-Hülle für Google-Ads-Landingpages (/angebot/*).
+// Unterschiede zu BaseLayout: KEIN Navi-Menü (weniger Ablenkung = mehr Conversion),
+// noindex/nofollow (Ads-LPs gehören nicht in den Google-Index), reduzierter Footer
+// (nur Pflicht-Links Impressum/Datenschutz). Tracking/Consent/Conversion identisch verdrahtet.
+import '../styles/global.css';
+import StickyContact from '../components/StickyContact.astro';
+import Analytics from '../components/Analytics.astro';
+import ConsentBanner from '../components/ConsentBanner.astro';
+import ConversionTracking from '../components/ConversionTracking.astro';
+import { site } from '../data/site';
+
+interface Props {
+  title: string;
+  description?: string;
+  jsonLd?: Record<string, unknown>[];
+}
+const { title, description, jsonLd = [] } = Astro.props;
+---
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <!-- Ads-LP: bewusst NICHT indexieren (dedizierte Kampagnenseite, kein SEO-Ziel). -->
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" href="/cdn/67eacdeb6f6d737ef0fa7cd2/67eacdeb6f6d737ef0fa7f06_favicon-hepasolar.png" />
+    <link rel="apple-touch-icon" href="/cdn/67eacdeb6f6d737ef0fa7cd2/67eacdeb6f6d737ef0fa7f07_touchicon-hepasolar.png" />
+
+    {jsonLd.map((obj) => (
+      <script type="application/ld+json" set:html={JSON.stringify(obj)} />
+    ))}
+
+    <!-- Tracking: rendert nur, wenn in src/data/tracking.ts echte IDs stehen. -->
+    <Analytics />
+  </head>
+  <body>
+    <div class="page-wrapper">
+      <!-- Minimaler Header: Logo + Klick-to-Call, KEIN Navi (Ads-Best-Practice). -->
+      <header class="lp-header">
+        <div class="container-default w-container">
+          <div class="lp-header__inner">
+            <a href="#" class="lp-header__brand" aria-label="HePa Baut">
+              <img
+                src="/cdn/67eacdeb6f6d737ef0fa7cd2/682f08cbafd4c6f4363d9656_Logo-HepaBaut-455x213.png"
+                alt="HePa Baut Logo"
+                class="lp-header__logo"
+              />
+            </a>
+            <a href={`tel:${site.phonePrimaryHref}`} class="lp-header__call">
+              <span class="lp-header__call-label">Jetzt anrufen</span>
+              <span class="lp-header__call-num">{site.phonePrimary}</span>
+            </a>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <slot />
+      </main>
+
+      <!-- Reduzierter Footer: nur Pflichtangaben + rechtliche Links. -->
+      <footer class="lp-footer">
+        <div class="container-default w-container">
+          <div class="lp-footer__inner">
+            <div class="lp-footer__legal">
+              © {site.year} {site.name} – {site.legalName}
+            </div>
+            <nav class="lp-footer__links" aria-label="Rechtliches">
+              <a href="/impressum">Impressum</a>
+              <a href="/datenschutz">Datenschutz</a>
+              <a href="/">Zur Hauptseite</a>
+            </nav>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <StickyContact />
+    <ConsentBanner />
+    <ConversionTracking />
+
+    <!-- Formular via FormSubmit.co (Progressive Enhancement) — identisch zu BaseLayout. -->
+    <script is:inline>
+      document.querySelectorAll('form[data-ajax-form]').forEach((form) => {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const wrap = form.closest('.w-form') || form.parentElement;
+          const done = wrap && wrap.querySelector('.w-form-done');
+          const fail = wrap && wrap.querySelector('.w-form-fail');
+          const btn = form.querySelector('[type="submit"]');
+          const label = btn && (btn.value || btn.textContent);
+          if (btn) { btn.disabled = true; if ('value' in btn) btn.value = btn.getAttribute('data-wait') || 'Bitte warten...'; }
+          try {
+            const data = Object.fromEntries(new FormData(form).entries());
+            const res = await fetch(form.action.replace('formsubmit.co/', 'formsubmit.co/ajax/'), {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+              body: JSON.stringify(data),
+            });
+            if (res.ok) {
+              form.style.display = 'none';
+              if (done) done.style.display = 'block';
+              if (typeof window.hepaTrackLead === 'function') {
+                window.hepaTrackLead(form.getAttribute('data-form-name') || 'ads');
+              }
+            } else {
+              throw new Error('bad status');
+            }
+          } catch (err) {
+            if (fail) fail.style.display = 'block';
+          } finally {
+            if (btn) { btn.disabled = false; if ('value' in btn && label) btn.value = label; }
+          }
+        });
+      });
+    </script>
+
+    <style is:global>
+      .lp-header {
+        background: var(--neutral--100, #fff);
+        border-bottom: 1px solid var(--neutral--300, #eee);
+      }
+      .lp-header__inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 14px 0;
+      }
+      .lp-header__logo { height: 44px; width: auto; display: block; }
+      .lp-header__call {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: flex-end;
+        text-decoration: none;
+        font-family: 'Onest', sans-serif;
+        line-height: 1.15;
+      }
+      .lp-header__call-label { font-size: 12px; color: var(--neutral--600, #666); }
+      .lp-header__call-num { font-size: 20px; font-weight: 700; color: var(--secondary--color-1, #063137); }
+      .lp-footer {
+        background: var(--secondary--color-1, #063137);
+        color: var(--neutral--100, #fff);
+        padding: 28px 0;
+        font-family: 'Onest', sans-serif;
+      }
+      .lp-footer__inner {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        font-size: 14px;
+      }
+      .lp-footer__links { display: flex; gap: 18px; flex-wrap: wrap; }
+      .lp-footer__links a { color: var(--neutral--100, #fff); text-decoration: underline; opacity: 0.9; }
+      .lp-footer__links a:hover { opacity: 1; }
+      @media (max-width: 479px) {
+        .lp-header__call-num { font-size: 17px; }
+        .lp-footer__inner { flex-direction: column; align-items: flex-start; }
+      }
+    </style>
+  </body>
+</html>

@@ -1,0 +1,154 @@
+---
+// Google-Ads-Landingpage „Badsanierung + Ort" → /angebot/badsanierung-<ort>.
+// noindex + nicht in Sitemap (siehe LandingLayout + astro.config.mjs). Ein Ziel: Anfrage.
+// Datengetrieben aus src/data/ads.ts — neuer Ort = 1 Zeile in badsanierungTowns.
+import LandingLayout from '../../layouts/LandingLayout.astro';
+import LandingForm from '../../components/LandingForm.astro';
+import UspGrid from '../../components/UspGrid.astro';
+import FaqAccordionV2 from '../../components/FaqAccordionV2.astro';
+import { badsanierung, badsanierungTowns, withOrt } from '../../data/ads';
+import { site } from '../../data/site';
+
+export function getStaticPaths() {
+  return badsanierungTowns.map((t) => ({ params: { ort: t.slug }, props: { town: t } }));
+}
+
+const { town } = Astro.props;
+const ort = town.name;
+const formName = `ads-badsanierung-${town.slug}`;
+
+const h1 = withOrt(badsanierung.h1Template, ort);
+const title = withOrt(badsanierung.titleTemplate, ort);
+const description = withOrt(badsanierung.metaDescriptionTemplate, ort);
+
+// Benefits mit ersetztem {ort} in die UspGrid-Form bringen.
+const benefits = badsanierung.benefits.map((b) => ({ title: b.title, text: withOrt(b.text, ort) }));
+const steps = badsanierung.steps.map((s) => ({ title: s.title, text: withOrt(s.text, ort) }));
+const faq = badsanierung.faq.map((f) => ({ q: withOrt(f.q, ort), a: withOrt(f.a, ort) }));
+---
+<LandingLayout title={title} description={description}>
+  <!-- HERO mit Headline + Formular (above the fold) -->
+  <LandingForm
+    withEmail={true}
+    title={badsanierung.formTitle}
+    subject={`Badsanierung-Anfrage (${ort}) über hepabaut.de`}
+    formName={formName}
+  >
+    <div slot="above-form" class="lp-hero-head">
+      <div class="accent-line-2 center"></div>
+      <h1 class="display-1">{h1}</h1>
+      <p class="lp-hero-sub">{badsanierung.subline}</p>
+      <ul class="lp-badges">
+        {badsanierung.trustBadges.map((b) => (
+          <li class="lp-badge">{b}</li>
+        ))}
+      </ul>
+    </div>
+  </LandingForm>
+
+  <!-- NUTZEN / TRUST -->
+  <UspGrid
+    heading={badsanierung.benefitsHeading}
+    usps={benefits}
+    ctaVariant="buttons-row-phone"
+    ctaLabel="Kostenloses Angebot"
+    ctaHref="#form-hero"
+    telHref={`tel:${site.phonePrimaryHref}`}
+  />
+
+  <!-- ABLAUF -->
+  <section class="section pd-80px lp-process">
+    <div class="container-default w-container">
+      <div class="text-center-2 mg-bottom-48px">
+        <div class="accent-line-2 center"></div>
+        <h2 class="display-5">{badsanierung.processHeading}</h2>
+      </div>
+      <div class="lp-steps">
+        {steps.map((s) => (
+          <div class="lp-step">
+            <h3 class="lp-step__title">{s.title}</h3>
+            <p class="lp-step__text">{s.text}</p>
+          </div>
+        ))}
+      </div>
+      <div class="lp-process__cta">
+        <a href="#form-hero" class="btn-primary w-button">Jetzt kostenloses Angebot sichern</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <FaqAccordionV2 heading={faq.length ? badsanierung.faqHeading : ''} items={faq} />
+
+  <style is:global>
+    .lp-hero-head { text-align: center; max-width: 720px; margin: 0 auto 28px; }
+    .lp-hero-head .display-1 { margin-bottom: 16px; }
+    .lp-hero-sub {
+      color: var(--neutral--700, #353535);
+      font-size: 19px;
+      line-height: 1.5;
+      margin: 0 auto;
+      max-width: 620px;
+    }
+    .lp-badges {
+      list-style: none;
+      padding: 0;
+      margin: 22px 0 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px 14px;
+    }
+    .lp-badge {
+      font-family: 'Onest', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--secondary--color-1, #063137);
+      background: var(--neutral--100, #fff);
+      border: 1px solid var(--neutral--300, #eee);
+      box-shadow: 0 4px 14px rgba(6, 49, 55, 0.06);
+      border-radius: 999px;
+      padding: 8px 16px 8px 34px;
+      position: relative;
+    }
+    .lp-badge::before {
+      content: '';
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent--primary-1, #06c35d);
+      transform: translateY(-50%);
+    }
+    .lp-process { background: var(--neutral--200, #f7f7f7); }
+    .lp-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+    .lp-step {
+      background: var(--neutral--100, #fff);
+      border: 1px solid var(--neutral--300, #eee);
+      border-radius: 16px;
+      padding: 24px;
+    }
+    .lp-step__title {
+      font-family: 'Onest', sans-serif;
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--secondary--color-1, #063137);
+      margin: 0 0 8px;
+    }
+    .lp-step__text { margin: 0; font-size: 15px; line-height: 1.55; }
+    .lp-process__cta { text-align: center; margin-top: 40px; }
+    @media (max-width: 991px) {
+      .lp-steps { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 479px) {
+      .lp-steps { grid-template-columns: 1fr; }
+      .lp-hero-sub { font-size: 17px; }
+    }
+  </style>
+</LandingLayout>
