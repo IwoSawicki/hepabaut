@@ -15,9 +15,11 @@ interface Props {
   jsonLd?: Record<string, unknown>[];
   /** overlay = transparenter Header über dunklem Hero (Startseite); solid = Innenseiten. */
   headerVariant?: 'overlay' | 'solid';
+  /** true → <meta robots noindex,follow> (Doorway-Konsolidierung: Seite bleibt live, raus aus Index). */
+  noindex?: boolean;
 }
 
-const { title, description, jsonLd = [], headerVariant = 'solid' } = Astro.props;
+const { title, description, jsonLd = [], headerVariant = 'solid', noindex = false } = Astro.props;
 // Saubere Canonical ohne .html / Trailing-Slash — muss 1:1 zur Original-URL passen (ranking-kritisch).
 const cleanPath =
   Astro.url.pathname.replace(/index\.html$/, '').replace(/\.html$/, '').replace(/\/+$/, '') || '/';
@@ -30,6 +32,7 @@ const canonical = new URL(cleanPath, Astro.site).href.replace(/\/$/, cleanPath =
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
+    {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/cdn/67eacdeb6f6d737ef0fa7cd2/67eacdeb6f6d737ef0fa7f06_favicon-hepasolar.png" />
     <link rel="apple-touch-icon" href="/cdn/67eacdeb6f6d737ef0fa7cd2/67eacdeb6f6d737ef0fa7f07_touchicon-hepasolar.png" />

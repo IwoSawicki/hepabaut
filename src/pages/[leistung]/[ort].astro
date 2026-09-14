@@ -7,6 +7,7 @@ import WasserschadenTemplate from '../../components/templates/WasserschadenTempl
 import { leistungen, withOrt } from '../../data/leistungen';
 import { orte } from '../../data/orte';
 import { site } from '../../data/site';
+import { isOrtIndexierbar } from '../../data/seo';
 
 const TEMPLATES = {
   sanierung: SanierungTemplate,
@@ -31,6 +32,8 @@ const Template = TEMPLATES[leistungSlug as keyof typeof TEMPLATES];
 
 const title = withOrt(l.titleTemplate, o.name);
 const description = withOrt(l.metaDescriptionTemplate, o.name);
+// Doorway-Konsolidierung: nur Kern-Kombis indexieren, Rest noindex (URL bleibt live).
+const noindex = !isOrtIndexierbar(leistungSlug, ortSlug);
 const base = Astro.site!.href.replace(/\/$/, '');
 
 const jsonLd: Record<string, unknown>[] = [
@@ -75,6 +78,6 @@ if (l.faq.length > 0) {
   });
 }
 ---
-<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+<BaseLayout title={title} description={description} jsonLd={jsonLd} noindex={noindex}>
   <Template ort={o.name} />
 </BaseLayout>

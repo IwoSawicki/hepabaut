@@ -144,14 +144,39 @@
 }
 
 /*
-  FAQ-Animation: sanftes Auf-/Zuklappen des Antwort-Bereichs.
+  FAQ-Hover: dezent statt des Original-Webflow-Effekts (Startseite schrumpfte auf scale(.98),
+  Leistungsseiten sprangen um translate(8px) — beides wirkt „ruckelig"). Jetzt: sanfter Schatten
+  bzw. Titel-Einfärbung, jeweils mit Transition. Unlayered → gewinnt über webflow.css (base).
+*/
+.accordion-item-wrapper {
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.accordion-item-wrapper:hover {
+  transform: none;
+  box-shadow: 0 8px 24px rgba(6, 49, 55, 0.08);
+}
+.accordion-item-wrapper.v2:hover {
+  transform: none;
+  box-shadow: none;
+}
+.accordion-item-wrapper.v2 .accordion-title {
+  transition: color 0.25s ease;
+}
+.accordion-item-wrapper.v2:hover .accordion-title {
+  color: var(--accent--primary-1);
+}
+
+/*
+  FAQ-Animation: sanftes Auf-/Zuklappen des Antwort-Bereichs (Höhe + Fade).
   Exklusiv (nur eine Frage offen) läuft über das native name-Attribut am <details> (siehe Komponenten).
 */
 .faq-details::details-content {
   block-size: 0;
+  opacity: 0;
   overflow: hidden;
-  transition: block-size 0.35s ease, content-visibility 0.35s ease allow-discrete;
+  transition: block-size 0.3s ease, opacity 0.3s ease, content-visibility 0.3s allow-discrete;
 }
 .faq-details[open]::details-content {
   block-size: auto;
+  opacity: 1;
 }
