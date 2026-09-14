@@ -16,7 +16,11 @@ RUN npm run build
 
 # ---- Runtime-Stage ----
 FROM nginx:alpine
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Default = indexierbar (Prod/main). Staging (dev) überschreibt ROBOTS_TAG in Dokploy
+# mit "noindex, nofollow". Das nginx-Image ersetzt ${ROBOTS_TAG} in der .template-Datei
+# beim Container-Start per envsubst (nur definierte Env-Vars → $uri etc. bleiben unangetastet).
+ENV ROBOTS_TAG="all"
+COPY nginx.conf /etc/nginx/templates/default.conf.template
 COPY --from=build /app/dist /usr/share/nginx/html
 
 EXPOSE 80

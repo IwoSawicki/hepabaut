@@ -217,6 +217,8 @@ npm run preview   # Build lokal prüfen
 - Datenschutz final (self-hosted Fonts, kein Google-Tracking → Text anpassen; Consent nur falls
   später Tracking dazukommt).
 - Ortsseiten-`<title>`/`<meta>` gegen Original prüfen (Original setzt sie teils per JS).
-- `nginx.conf`: `X-Robots-Tag noindex` entfernen, sobald auf der echten Domain live.
+- `nginx.conf`: Indexierbarkeit läuft jetzt über Env-Var `ROBOTS_TAG` (Dockerfile-Default `all` =
+  indexierbar für Prod/`main`; Staging/`dev` setzt in Dokploy `ROBOTS_TAG="noindex, nofollow"`).
+  Config ist ein `envsubst`-Template (`/etc/nginx/templates/default.conf.template`).
 - Widersprüche im Original (2 Telefonnummern, hepasolar.de vs. hepabaut.de, Bürstadt vs.
   Mörlenbach) mit Kunde klären (aktuell 1:1 übernommen).
