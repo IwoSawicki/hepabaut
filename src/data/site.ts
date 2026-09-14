@@ -11,6 +11,11 @@ export const site = {
   phoneFooterHref: '+4962061857728',
   emailFooter: 'info@hepabaut.de',
   emailKontakt: 'info@hepabaut.de',
+  // Zieladresse aller Kontaktformulare (FormSubmit.co). Läuft auf die KUNDEN-Mail.
+  // WICHTIG: FormSubmit verlangt bei der ERSTEN Absendung eine Aktivierung per Mail an
+  // genau diese Adresse — der Kunde muss den Bestätigungslink in info@hepabaut.de klicken,
+  // sonst werden keine Anfragen zugestellt. Zum Mitlesen ggf. _cc-Feld im Formular ergänzen.
+  formAction: 'https://formsubmit.co/info@hepabaut.de',
   addressStreet: 'Steinlachstraße 66',
   addressCity: '68642 Bürstadt',
   designedBy: 'Sawix Studio',

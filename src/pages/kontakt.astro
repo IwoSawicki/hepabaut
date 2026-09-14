@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import FaqAccordion from '../components/FaqAccordion.astro';
+import { site } from '../data/site';
 
 const faq = [
   { q: 'Was kostet eine Sanierung oder Renovierung?', a: 'Die Kosten variieren je nach Zustand und Größe der Immobilie sowie nach gewünschter Leistung. Nach einem kostenlosen Vor-Ort-Termin erstellen wir ein individuelles, transparentes Angebot – ohne versteckte Kosten oder böse Überraschungen.' },
@@ -46,7 +47,7 @@ const faq = [
         <!-- TODO(Phase 4): Formular-Endpoint + Spam-Schutz + Consent anbinden -->
         <div id="w-node-e8c3b984-cd7a-a694-a808-ec14a2718881-f0fa7d27" class="card contact-form">
           <div class="contact-form-block w-form">
-            <form action="https://formsubmit.co/iwo@stolz-marketing.de" method="POST" class="contact-form-grid" data-ajax-form>
+            <form action={site.formAction} method="POST" class="contact-form-grid" data-ajax-form>
               <input type="hidden" name="_subject" value="Neue Anfrage über hepabaut.de (Kontakt)" />
               <input type="hidden" name="_template" value="table" />
               <input type="hidden" name="_captcha" value="false" />
