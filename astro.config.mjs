@@ -5,7 +5,9 @@ import tailwindcss from '@tailwindcss/vite';
 
 // Live-Domain: URL-Struktur RANKING-KRITISCH 1:1 beibehalten (keine Trailing-Slashes).
 export default defineConfig({
-  site: 'https://www.hepabaut.de',
+  // Kanonische Domain OHNE www (Apex lädt; www ist noch nicht live). Steuert Sitemap,
+  // Canonical-Tags, og:url und JSON-LD-Basis. Bei www-Umstellung später hier + robots.txt ändern.
+  site: 'https://hepabaut.de',
   trailingSlash: 'never',
   // Clean URLs ohne .html (/sanierung/heidelberg). 'directory' erzeugt .../index.html,
   // die Hosts unter dem sauberen Pfad ausliefern.
